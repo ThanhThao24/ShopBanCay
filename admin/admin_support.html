@@ -92,53 +92,71 @@
 
             <div class="admin-content support-content">
                 <!-- Support Header & Stats -->
-                <div class="support-header-section">
+                <div class="support-header-row">
                     <div>
-                        <h2>Chăm Sóc Khách Hàng</h2>
-                        <p>Phản hồi và hỗ trợ khách hàng ngay tức thì.</p>
+                        <h2 class="support-title">Chăm Sóc Khách Hàng</h2>
+                        <p class="support-subtitle">Phản hồi và hỗ trợ khách hàng ngay tức thì.</p>
                     </div>
-                    <div class="support-stats-grid">
-                        <div>
-                            <span>TỔNG YÊU CẦU</span>
-                            <div>1,284</div>
+                    <div class="support-stats">
+                        <div class="stat-box">
+                            <span class="stat-label">TỔNG YÊU CẦU</span>
+                            <div class="stat-value">1,284</div>
                         </div>
-                        <div>
-                            <span>ĐANG CHỜ</span>
-                            <div>12</div>
+                        <div class="stat-box">
+                            <span class="stat-label">ĐANG CHỜ</span>
+                            <div class="stat-value text-red">12</div>
                         </div>
-                        <div>
-                            <span>ĐANG TƯ VẤN</span>
-                            <div>45</div>
+                        <div class="stat-box">
+                            <span class="stat-label">ĐANG TƯ VẤN</span>
+                            <div class="stat-value text-green">45</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Workspace -->
-                <div class="support-workspace-grid">
+                <div class="support-workspace">
                     <!-- Inbox Panel -->
                     <div class="inbox-panel">
-                        <div>
+                        <div class="inbox-header">
                             <h3>Hộp thư đến</h3>
-                            <button><img src="../assets/figma/ebb13d36-62e5-452b-94a4-3712408c8bc5.svg" alt="Filter"></button>
+                            <button class="btn-filter-inbox"><img src="../assets/figma/ebb13d36-62e5-452b-94a4-3712408c8bc5.svg" alt="Filter"></button>
                         </div>
                         <div class="inbox-list">
                             <!-- Active Item -->
-                            <div>
-                                <div>
-                                    <span>Nguyễn Văn An</span>
-                                    <span>Đang tư vấn</span>
+                            <div class="inbox-item active">
+                                <div class="item-header-row">
+                                    <span class="customer-name">Nguyễn Văn An</span>
+                                    <span class="badge-status bg-orange">Đang tư vấn</span>
                                 </div>
-                                <p>Cây bàng Singapore của mình có dấu hiệ…</p>
-                                <span>2 phút trước</span>
+                                <p class="message-preview">Cây bàng Singapore của mình có dấu hiệ…</p>
+                                <span class="message-time">2 phút trước</span>
                             </div>
                             <!-- Item 2 -->
-                            <div>
-                                <div>
-                                    <span>Trần Thị Bé</span>
-                                    <span>Chờ xử lý</span>
+                            <div class="inbox-item">
+                                <div class="item-header-row">
+                                    <span class="customer-name">Trần Thị Bé</span>
+                                    <span class="badge-status bg-red">Chờ xử lý</span>
                                 </div>
-                                <p>Đơn hàng #8821 vẫn chưa thấy giao đến…</p>
-                                <span>15 phút trước</span>
+                                <p class="message-preview">Đơn hàng #8821 vẫn chưa thấy giao đến…</p>
+                                <span class="message-time">15 phút trước</span>
+                            </div>
+                            <!-- Item 3 -->
+                            <div class="inbox-item">
+                                <div class="item-header-row">
+                                    <span class="customer-name">Lê Minh Tuấn</span>
+                                    <span class="badge-status bg-gray">Đã xong</span>
+                                </div>
+                                <p class="message-preview">Cảm ơn shop đã hướng dẫn nhiệt tình nhé!</p>
+                                <span class="message-time">1 giờ trước</span>
+                            </div>
+                            <!-- Item 4 -->
+                            <div class="inbox-item">
+                                <div class="item-header-row">
+                                    <span class="customer-name">Hoàng Mỹ Linh</span>
+                                    <span class="badge-status bg-orange">Đang tư vấn</span>
+                                </div>
+                                <p class="message-preview">Mình muốn đặt thêm 3 chậu sen đá vạn…</p>
+                                <span class="message-time">2 giờ trước</span>
                             </div>
                         </div>
                     </div>
@@ -146,86 +164,109 @@
                     <!-- Chat Interface Panel -->
                     <div class="chat-panel">
                         <div class="chat-header">
-                            <div>
-                                <div>
+                            <div class="chat-user-info">
+                                <div class="avatar-ring">
                                     <img src="../assets/figma/39ce1dc7-e848-4955-a03e-421c98b8ef05.png" alt="Customer">
                                 </div>
-                                <div>
+                                <div class="user-status-col">
                                     <h4>Nguyễn Văn An</h4>
-                                    <div>
-                                        <span></span>
-                                        <span>Đang hoạt động</span>
+                                    <div class="status-indicator">
+                                        <div class="dot-online"></div>
+                                        <span class="status-text">Đang hoạt động</span>
                                     </div>
                                 </div>
                             </div>
-                            <button>
-                                <img src="../assets/figma/c36eaeb7-ec7a-4a75-822d-462b19031a80.svg" alt="H">
+                            <button class="btn-purchase-history">
+                                <img src="../assets/figma/c36eaeb7-ec7a-4a75-822d-462b19031a80.svg" alt="History">
                                 <span>Lịch sử mua hàng</span>
                             </button>
                         </div>
-                        
+
                         <div class="chat-area">
-                            <div><span>HÔM NAY</span></div>
-                            
+                            <div class="chat-date-separator"><span>HÔM NAY</span></div>
+
                             <!-- Msg Received -->
-                            <div>
-                                <div>
-                                    <img src="../assets/figma/39ce1dc7-e848-4955-a03e-421c98b8ef05.png" alt="A">
-                                </div>
-                                <div>
+                            <div class="chat-message message-received">
+                                <img class="chat-avatar" src="../assets/figma/39ce1dc7-e848-4955-a03e-421c98b8ef05.png" alt="Customer">
+                                <div class="message-bubble">
                                     <p>Chào shop, mình mua cây Bàng Singapore bên mình được 2 tuần rồi. Dạo này mấy lá ở dưới bắt đầu bị vàng và rụng. Cho mình hỏi nguyên nhân do đâu và cách khắc phục với ạ?</p>
-                                    <span>10:45 AM</span>
+                                    <span class="msg-time">10:45 AM</span>
                                 </div>
                             </div>
 
                             <!-- Msg Sent -->
-                            <div>
-                                <div>
+                            <div class="chat-message message-sent">
+                                <div class="message-bubble">
                                     <p>Chào anh An ạ! Rất xin lỗi về sự cố với cây. Thường lá vàng dưới gốc có thể do tưới quá nhiều hoặc thiếu sáng. Anh có thể chụp giúp em vị trí đặt cây và tình trạng đất được không ạ?</p>
-                                    <span>10:48 AM</span>
+                                    <span class="msg-time">10:48 AM</span>
                                 </div>
-                                <div>MX</div>
+                                <div class="admin-avatar">MX</div>
+                            </div>
+
+                            <!-- Msg Received with image -->
+                            <div class="chat-message message-received">
+                                <img class="chat-avatar" src="../assets/figma/39ce1dc7-e848-4955-a03e-421c98b8ef05.png" alt="Customer">
+                                <div class="message-bubble">
+                                    <p>Đây nè shop, mình để ở góc phòng khách, có ánh sáng gián tiếp nhẹ.</p>
+                                    <div class="msg-image">
+                                        <img src="../assets/figma/6e589377-22cf-4778-8adf-97d4de3f388f.jpg" alt="Plant photo">
+                                    </div>
+                                    <span class="msg-time">10:50 AM</span>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Details Panel -->
                     <div class="details-panel">
-                        <div>
-                            <img src="../assets/figma/39ce1dc7-e848-4955-a03e-421c98b8ef05.png" alt="Large">
-                        </div>
-                        <h2>Nguyễn Văn An</h2>
-                        <div>
-                            <img src="../assets/figma/a06e208e-a056-4e18-bb5c-76568a4682ce.svg" alt="C">
-                            <span>HẠNG: MẦM NON</span>
+                        <div class="customer-profile-large">
+                            <div class="avatar-large-ring">
+                                <img src="../assets/figma/39ce1dc7-e848-4955-a03e-421c98b8ef05.png" alt="Customer">
+                            </div>
+                            <h2>Nguyễn Văn An</h2>
+                            <div class="member-tier">
+                                <img src="../assets/figma/a06e208e-a056-4e18-bb5c-76568a4682ce.svg" alt="Tier">
+                                <span>HẠNG: MẦM NON</span>
+                            </div>
                         </div>
 
-                        <div>
-                            <div>
-                                <span>THÔNG TIN LIÊN HỆ</span>
-                                <div>
-                                    <div>
-                                        <img src="../assets/figma/5b6c1587-c25a-4020-a2ca-cdf7999afc79.svg" alt="P"> 0908 123 456
+                        <div class="details-cards">
+                            <div class="contact-card">
+                                <span class="card-eyebrow">THÔNG TIN LIÊN HỆ</span>
+                                <div class="contact-list">
+                                    <div class="contact-item">
+                                        <img src="../assets/figma/5b6c1587-c25a-4020-a2ca-cdf7999afc79.svg" alt="Phone">
+                                        <span>0908 123 456</span>
                                     </div>
-                                    <div>
-                                        <img src="../assets/figma/80e7abc7-9e89-4658-b8e3-4421f93b4a80.svg" alt="E"> an.nguyen@email.com
+                                    <div class="contact-item">
+                                        <img src="../assets/figma/80e7abc7-9e89-4658-b8e3-4421f93b4a80.svg" alt="Email">
+                                        <span>an.nguyen@email.com</span>
+                                    </div>
+                                    <div class="contact-item">
+                                        <img src="../assets/figma/5b6c1587-c25a-4020-a2ca-cdf7999afc79.svg" alt="Location">
+                                        <span>Quận 7, TP.HCM</span>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div>
-                                <div>
-                                    <span>ĐƠN HÀNG</span>
-                                    <span>08</span>
+
+                            <div class="stats-row">
+                                <div class="small-stat-card">
+                                    <span class="stat-label">ĐƠN HÀNG</span>
+                                    <span class="stat-val">08</span>
                                 </div>
-                                <div>
-                                    <span>TÍCH LŨY</span>
-                                    <span>1.2M</span>
+                                <div class="small-stat-card">
+                                    <span class="stat-label">TÍCH LŨY</span>
+                                    <span class="stat-val">1.2M</span>
                                 </div>
                             </div>
 
-                            <button>Chỉnh sửa hồ sơ</button>
+                            <div class="note-card">
+                                <span class="card-eyebrow">GHI CHÚ NỘI BỘ</span>
+                                <p class="note-text">"Khách thích các dòng cây kiểng lá nhiệt đới, thường hỏi kỹ về cách chăm sóc."</p>
+                            </div>
                         </div>
+
+                        <button class="btn-edit-profile">Chỉnh sửa hồ sơ</button>
                     </div>
                 </div>
             </div>
