@@ -15,13 +15,15 @@
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="admin-sidebar">
-            <div class="sidebar-top">
-                <div class="admin-brand">
-                    <h1>Mầm Xanh</h1>
-                    <span>Admin Portal</span>
+            <div class="admin-brand">
+                <div class="logo-wrapper">
+                    <div class="logo-bg-nav"></div>
+                    <img class="logo-icon-nav" src="../assets/figma/4b9e6e0f-eb58-449f-9b44-3d39b9e665a3.png" alt="Logo">
                 </div>
+                <div class="brand-name">Mầm Xanh</div>
+            </div>
 
-                <nav class="admin-nav">
+            <nav class="admin-nav">
                     <a href="dashboard.html" class="admin-nav-item">
                         <img src="../assets/figma/44187262-fe27-4a4b-bc4c-eb6d2ab5151e.svg" alt="Overview">
                         <span>Tổng quan</span>
@@ -55,8 +57,7 @@
                         <span>Phân tích</span>
                     </a>
                 </nav>
-            </div>
-            
+
             <div class="sidebar-bottom">
                 <button class="btn-new-ticket">
                     <img src="../assets/figma/72b90c02-1057-4de5-af3d-b004d2d98c87.svg" alt="Plus">
@@ -67,21 +68,24 @@
 
         <!-- Main Content Area -->
         <main class="admin-main">
-            <!-- Topbar (Authority Components) -->
-            <header class="admin-topbar">
-                <div class="search-wrap">
-                    <img src="../assets/figma/2d55320a-a5c8-478a-a371-005c14b4b36a.svg" alt="Search">
+            <!-- Header -->
+            <header class="admin-header">
+                <div class="admin-search">
+                    <div class="admin-search-icon">
+                        <img src="../assets/figma/2d55320a-a5c8-478a-a371-005c14b4b36a.svg" alt="Search">
+                    </div>
                     <input type="text" placeholder="Tìm kiếm yêu cầu...">
                 </div>
-                
-                <div class="topbar-actions">
-                    <div>
-                        <button><img src="../assets/figma/b9b7562e-0359-4d8d-b67c-d59d229521f5.svg" alt="N"></button>
-                        <button><img src="../assets/figma/22495a5b-93f2-4f86-8559-83fc4510d2c3.svg" alt="S"></button>
-                        <button><img src="../assets/figma/d44100f0-05d0-4ce0-bd03-536aa7250b46.svg" alt="H"></button>
+                <div class="admin-profile">
+                    <div class="admin-notif">
+                        <img src="../assets/figma/b9b7562e-0359-4d8d-b67c-d59d229521f5.svg" alt="Notifications">
+                        <span class="notif-dot"></span>
                     </div>
-                    <div class="user-avatar">
-                        <img src="../assets/figma/36fa8a97-f2cb-4b7c-926f-d8cd7c7fbde4.png" alt="User">
+                    <div class="admin-user">
+                        <span class="user-role">Quản trị Mầm Xanh</span>
+                        <div class="user-avatar">
+                            <img src="../assets/figma/36fa8a97-f2cb-4b7c-926f-d8cd7c7fbde4.png" alt="Avatar">
+                        </div>
                     </div>
                 </div>
             </header>
