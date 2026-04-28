@@ -10,18 +10,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&family=Miama&display=swap" rel="stylesheet">
 </head>
-<body class="admin-body">
+<body>
+    <div class="admin-layout">
     <!-- Sidebar -->
     <aside class="admin-sidebar">
-        <div class="admin-sidebar-logo">
-            <div class="nav-logo">
-                <div class="nav-logo-bg-shape"></div>
-                <div class="nav-logo-subtitle">Mầm Xanh</div>
-                <div class="nav-logo-icon-wrap">
-                    <img src="../assets/figma/ffa71a92-4aa9-4c9a-885b-ef6879b7d9fc.png" alt="Logo Icon">
-                </div>
+        <div class="admin-brand">
+            <div class="logo-wrapper">
+                <div class="logo-bg-nav"></div>
+                <img class="logo-icon-nav" src="../assets/figma/ffa71a92-4aa9-4c9a-885b-ef6879b7d9fc.png" alt="Logo">
             </div>
-            <h1 class="nav-brand-name" style="margin-left: 12px;">Mầm Xanh</h1>
+            <div class="brand-name">Mầm Xanh</div>
         </div>
 
         <nav class="admin-nav">
@@ -61,7 +59,7 @@
     </aside>
 
     <!-- Main Wrapper -->
-    <div class="admin-wrapper">
+    <div class="admin-main">
         <!-- Header -->
         <header class="admin-header">
             <div class="admin-search">
@@ -195,9 +193,9 @@
                 </div>
             </div>
         </main>
-    </div>
-    <script src="../js/store.js"></script>
-
-    <script src="../js/dashboard.js"></script>
+    </div>  <!-- closes admin-main -->
+  </div>  <!-- closes admin-layout -->
+  <script src="../js/store.js"></script>
+  <script src="../js/dashboard.js"></script>
 </body>
 </html>
