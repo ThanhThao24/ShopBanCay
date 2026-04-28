@@ -308,6 +308,45 @@
     text-align: center;
 }
 
+.btn-primary-solid {
+    background-color: #154212;
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-primary-solid:hover {
+    background-color: #0d2b0d;
+}
+
+.btn-primary-solid img {
+    width: 16px;
+    height: 16px;
+}
+
+.pagination-shell {
+    padding: 20px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f5f5f4;
+}
+
+.page-info {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #6b7268;
+}
+
 @media (max-width: 1024px) {
     .stats-bento-grid {
         grid-template-columns: 1fr;

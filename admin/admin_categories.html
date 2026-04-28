@@ -85,60 +85,60 @@
             </header>
 
             <!-- Page Content -->
-            <div class="admin-content">
-                <div class="page-header">
+            <div class="admin-content categories-content">
+                <div class="page-header-row">
                     <div>
                         <h2>Quản lý danh mục</h2>
-                        <p>Tổ chức và phân loại các loài cây trong hệ thống một cách khoa học và thẩm mỹ.</p>
+                        <p class="page-desc">Tổ chức và phân loại các loài cây trong hệ thống một cách khoa học và thẩm mỹ.</p>
                     </div>
-                    <button>
+                    <button class="btn-primary-solid btn-add">
                         <img src="../assets/figma/00f8e2bb-5283-4447-93b8-8c3d2173cab4.svg" alt="Add">
                         Thêm danh mục mới
                     </button>
                 </div>
 
-                <!-- Stats Grid -->
-                <div class="stats-grid">
-                    <div>
-                        <div>
-                            <span>Tổng số danh mục</span>
+                <!-- Stats Bento Grid -->
+                <div class="stats-bento-grid">
+                    <div class="stat-bento-card border-green">
+                        <div class="card-top">
+                            <span class="stat-eyebrow">Tổng số danh mục</span>
                             <img src="../assets/figma/fcba12be-ac3d-4d2d-ab91-4a4e684f8302.svg" alt="I">
                         </div>
-                        <span>12</span>
-                        <div>
+                        <span class="stat-large text-green-light">12</span>
+                        <div class="stat-trend">
                             <img src="../assets/figma/720a823e-55f9-4e72-bb19-f67a2b95d732.svg" alt="up">
-                            <span>+2 so với tháng trước</span>
+                            <span class="trend-text">+2 so với tháng trước</span>
                         </div>
                     </div>
-                    <div>
-                        <div>
-                            <span>Danh mục hoạt động</span>
+                    <div class="stat-bento-card border-green-light">
+                        <div class="card-top">
+                            <span class="stat-eyebrow">Danh mục hoạt động</span>
                             <img src="../assets/figma/d68ab70d-8ec7-442f-9475-c6ede4f10a0b.svg" alt="I">
                         </div>
-                        <span>10</span>
-                        <span>Chiếm 83% tổng số hệ thống</span>
+                        <span class="stat-large text-green-light">10</span>
+                        <span class="stat-desc">Chiếm 83% tổng số hệ thống</span>
                     </div>
-                    <div>
-                        <div>
-                            <span>Danh mục đang ẩn</span>
+                    <div class="stat-bento-card border-pink">
+                        <div class="card-top">
+                            <span class="stat-eyebrow">Danh mục đang ẩn</span>
                             <img src="../assets/figma/5a484fbb-da45-4896-8494-5f2e5721ea12.svg" alt="I">
                         </div>
-                        <span>2</span>
-                        <span>Cần kiểm tra lại nội dung</span>
+                        <span class="stat-large">2</span>
+                        <span class="stat-desc">Cần kiểm tra lại nội dung</span>
                     </div>
                 </div>
 
-                <!-- Table -->
-                <div>
-                    <div>
+                <!-- Category Table -->
+                <div class="cat-table-section">
+                    <div class="table-header">
                         <h3>Danh sách phân loại</h3>
-                        <div>
-                            <button class="btn-category-filter"><img src="../assets/figma/2f069dd7-aed2-4f5b-ae2f-baf9fec11d01.svg" alt="F"></button>
-                            <button class="btn-category-sort"><img src="../assets/figma/f568f6d2-1d01-45ab-9e64-d51eb5d0d913.svg" alt="S"></button>
+                        <div class="table-actions">
+                            <button class="action-btn btn-category-filter"><img src="../assets/figma/2f069dd7-aed2-4f5b-ae2f-baf9fec11d01.svg" alt="F"></button>
+                            <button class="action-btn btn-category-sort"><img src="../assets/figma/f568f6d2-1d01-45ab-9e64-d51eb5d0d913.svg" alt="S"></button>
                         </div>
                     </div>
 
-                    <table>
+                    <table class="categories-table">
                         <thead>
                             <tr>
                                 <th>Hình ảnh</th>
@@ -153,18 +153,18 @@
                             <!-- Row 1 -->
                             <tr>
                                 <td>
-                                    <div>
+                                    <div class="cat-img">
                                         <img src="../assets/figma/caeef0bf-fe55-4d83-8c2b-3b43ee06cfdc.jpg" alt="T">
                                     </div>
                                 </td>
-                                <td><span>Nhiệt đới</span></td>
-                                <td><p>Các loài cây nhiệt đới với tán lá rộng và x…</p></td>
-                                <td><span>45</span></td>
+                                <td><span class="cat-name">Nhiệt đới</span></td>
+                                <td><p class="cat-desc">Các loài cây nhiệt đới với tán lá rộng và x…</p></td>
+                                <td><span class="cat-qty">45</span></td>
                                 <td>
-                                    <div>Hoạt động</div>
+                                    <div class="status-badge bg-green-light text-green-light">Hoạt động</div>
                                 </td>
                                 <td>
-                                    <div>
+                                    <div class="actions">
                                         <button class="action-btn" data-action="Edit" title="Sửa"><img src="../assets/figma/911c0eb3-5297-4f60-aa03-c90dca39ec79.svg" alt="Edit"></button>
                                         <button class="action-btn" data-action="View" title="Xem"><img src="../assets/figma/7fb08ea8-71c5-41f1-8fb2-0d49255f7b61.svg" alt="View"></button>
                                         <button class="action-btn" data-action="Delete" title="Xóa"><img src="../assets/figma/9c55a93f-8bb7-4523-a579-1f343794660c.svg" alt="Delete"></button>
@@ -174,18 +174,18 @@
                             <!-- Row 2 -->
                             <tr>
                                 <td>
-                                    <div>
+                                    <div class="cat-img">
                                         <img src="../assets/figma/5b2087ce-d6bb-48cb-b351-1c763713eb02.jpg" alt="I">
                                     </div>
                                 </td>
-                                <td><span>Trong nhà</span></td>
-                                <td><p>Cây lọc không khí, thích hợp trang trí khô…</p></td>
-                                <td><span>32</span></td>
+                                <td><span class="cat-name">Trong nhà</span></td>
+                                <td><p class="cat-desc">Cây lọc không khí, thích hợp trang trí khô…</p></td>
+                                <td><span class="cat-qty">32</span></td>
                                 <td>
-                                    <div>Hoạt động</div>
+                                    <div class="status-badge bg-green-light text-green-light">Hoạt động</div>
                                 </td>
                                 <td>
-                                    <div>
+                                    <div class="actions">
                                         <button class="action-btn" data-action="Edit" title="Sửa"><img src="../assets/figma/911c0eb3-5297-4f60-aa03-c90dca39ec79.svg" alt="Edit"></button>
                                         <button class="action-btn" data-action="View" title="Xem"><img src="../assets/figma/7fb08ea8-71c5-41f1-8fb2-0d49255f7b61.svg" alt="View"></button>
                                         <button class="action-btn" data-action="Delete" title="Xóa"><img src="../assets/figma/9c55a93f-8bb7-4523-a579-1f343794660c.svg" alt="Delete"></button>
@@ -195,14 +195,14 @@
                         </tbody>
                     </table>
 
-                    <div>
-                        <span>Hiển thị 1-4 trên tổng 12</span>
-                        <div>
-                            <button><img src="../assets/figma/42b2f5c2-8088-4788-83ae-af4d68074e63.svg" alt="P"></button>
-                            <button>1</button>
-                            <button>2</button>
-                            <button>3</button>
-                            <button><img src="../assets/figma/364170b3-ae61-4fc3-af18-678bbea3c850.svg" alt="N"></button>
+                    <div class="pagination-shell">
+                        <span class="page-info">Hiển thị 1-4 trên tổng 12</span>
+                        <div class="pagination-controls">
+                            <button class="page-arrow"><img src="../assets/figma/42b2f5c2-8088-4788-83ae-af4d68074e63.svg" alt="P"></button>
+                            <button class="page-num active">1</button>
+                            <button class="page-num">2</button>
+                            <button class="page-num">3</button>
+                            <button class="page-arrow"><img src="../assets/figma/364170b3-ae61-4fc3-af18-678bbea3c850.svg" alt="N"></button>
                         </div>
                     </div>
                 </div>
