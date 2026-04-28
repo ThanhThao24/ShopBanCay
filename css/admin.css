@@ -435,6 +435,8 @@
 /* Content */
 .admin-content {
     padding: 48px;
+    background-color: #fafaf9;
+    flex: 1;
 }
 
 /* Stats */
