@@ -1,0 +1,6 @@
+<svg width="42" height="36" viewBox="0 0 42 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Background">
+<rect width="42" height="36" rx="16" fill="var(--fill-0, white)"/>
+<path id="Icon" d="M19 24V22H23V24H19V24M15 19V17H27V19H15V19M12 14V12H30V14H12V14" fill="var(--fill-0, #154212)"/>
+</g>
+</svg>

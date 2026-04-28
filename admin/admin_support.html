@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mầm Xanh - Chăm sóc khách hàng</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/admin-support.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto:wght@400;700&family=Manrope:wght@600;700;800&family=Miama&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-top">
+                <div class="admin-brand">
+                    <h1>Mầm Xanh</h1>
+                    <span>Admin Portal</span>
+                </div>
+
+                <nav class="admin-nav">
+                    <a href="dashboard.html" class="admin-nav-item">
+                        <img src="../assets/figma/44187262-fe27-4a4b-bc4c-eb6d2ab5151e.svg" alt="Overview">
+                        <span>Tổng quan</span>
+                    </a>
+                    <a href="admin_products.html" class="admin-nav-item">
+                        <img src="../assets/figma/efd15ce3-f83a-40b7-822f-df5ee6c3ca80.svg" alt="Products">
+                        <span>Sản phẩm</span>
+                    </a>
+                    <a href="admin_categories.html" class="admin-nav-item">
+                        <img src="../assets/figma/6b8c648d-bc29-4bd6-8e9b-ee46ddf72dbe.svg" alt="Categories">
+                        <span>Danh mục</span>
+                    </a>
+                    <a href="admin_support.html" class="admin-nav-item active">
+                        <img src="../assets/figma/b1916640-5388-450d-865b-eb53aa179740.svg" alt="Messages">
+                        <span>Tin nhắn</span>
+                    </a>
+                    <a href="admin_promotions.html" class="admin-nav-item">
+                        <img src="../assets/figma/d42b492c-50f8-4cfd-a043-84c1a371f6aa.svg" alt="Promotions">
+                        <span>Khuyến mãi</span>
+                    </a>
+                    <a href="admin_orders.html" class="admin-nav-item">
+                        <img src="../assets/figma/1a9705ff-ab63-4dd5-be85-b48061fe99f7.svg" alt="Orders">
+                        <span>Đơn hàng</span>
+                    </a>
+                    <a href="admin_revenue.html" class="admin-nav-item">
+                        <img src="../assets/figma/e1890ad3-b016-4db8-bcc0-52ac14124461.svg" alt="Revenue">
+                        <span>Doanh thu</span>
+                    </a>
+                    <a href="admin_analytics.html" class="admin-nav-item">
+                        <img src="../assets/figma/665676d1-12b7-4161-b953-3edd28517276.svg" alt="Analyze">
+                        <span>Phân tích</span>
+                    </a>
+                </nav>
+            </div>
+            
+            <div class="sidebar-bottom">
+                <button class="btn-new-ticket">
+                    <img src="../assets/figma/72b90c02-1057-4de5-af3d-b004d2d98c87.svg" alt="Plus">
+                    New Ticket
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="admin-main">
+            <!-- Topbar (Authority Components) -->
+            <header class="admin-topbar">
+                <div class="search-wrap">
+                    <img src="../assets/figma/2d55320a-a5c8-478a-a371-005c14b4b36a.svg" alt="Search">
+                    <input type="text" placeholder="Tìm kiếm yêu cầu...">
+                </div>
+                
+                <div class="topbar-actions">
+                    <div>
+                        <button><img src="../assets/figma/b9b7562e-0359-4d8d-b67c-d59d229521f5.svg" alt="N"></button>
+                        <button><img src="../assets/figma/22495a5b-93f2-4f86-8559-83fc4510d2c3.svg" alt="S"></button>
+                        <button><img src="../assets/figma/d44100f0-05d0-4ce0-bd03-536aa7250b46.svg" alt="H"></button>
+                    </div>
+                    <div class="user-avatar">
+                        <img src="../assets/figma/36fa8a97-f2cb-4b7c-926f-d8cd7c7fbde4.png" alt="User">
+                    </div>
+                </div>
+            </header>
+
+            <div class="support-content">
+                <!-- Support Header & Stats -->
+                <div class="support-header-section">
+                    <div>
+                        <h2>Chăm Sóc Khách Hàng</h2>
+                        <p>Phản hồi và hỗ trợ khách hàng ngay tức thì.</p>
+                    </div>
+                    <div class="support-stats-grid">
+                        <div>
+                            <span>TỔNG YÊU CẦU</span>
+                            <div>1,284</div>
+                        </div>
+                        <div>
+                            <span>ĐANG CHỜ</span>
+                            <div>12</div>
+                        </div>
+                        <div>
+                            <span>ĐANG TƯ VẤN</span>
+                            <div>45</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Workspace -->
+                <div class="support-workspace-grid">
+                    <!-- Inbox Panel -->
+                    <div class="inbox-panel">
+                        <div>
+                            <h3>Hộp thư đến</h3>
+                            <button><img src="../assets/figma/ebb13d36-62e5-452b-94a4-3712408c8bc5.svg" alt="Filter"></button>
+                        </div>
+                        <div class="inbox-list">
+                            <!-- Active Item -->
+                            <div>
+                                <div>
+                                    <span>Nguyễn Văn An</span>
+                                    <span>Đang tư vấn</span>
+                                </div>
+                                <p>Cây bàng Singapore của mình có dấu hiệ…</p>
+                                <span>2 phút trước</span>
+                            </div>
+                            <!-- Item 2 -->
+                            <div>
+                                <div>
+                                    <span>Trần Thị Bé</span>
+                                    <span>Chờ xử lý</span>
+                                </div>
+                                <p>Đơn hàng #8821 vẫn chưa thấy giao đến…</p>
+                                <span>15 phút trước</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Interface Panel -->
+                    <div class="chat-panel">
+                        <div class="chat-header">
+                            <div>
+                                <div>
+                                    <img src="../assets/figma/39ce1dc7-e848-4955-a03e-421c98b8ef05.png" alt="Customer">
+                                </div>
+                                <div>
+                                    <h4>Nguyễn Văn An</h4>
+                                    <div>
+                                        <span></span>
+                                        <span>Đang hoạt động</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button>
+                                <img src="../assets/figma/c36eaeb7-ec7a-4a75-822d-462b19031a80.svg" alt="H">
+                                <span>Lịch sử mua hàng</span>
+                            </button>
+                        </div>
+                        
+                        <div class="chat-area">
+                            <div><span>HÔM NAY</span></div>
+                            
+                            <!-- Msg Received -->
+                            <div>
+                                <div>
+                                    <img src="../assets/figma/39ce1dc7-e848-4955-a03e-421c98b8ef05.png" alt="A">
+                                </div>
+                                <div>
+                                    <p>Chào shop, mình mua cây Bàng Singapore bên mình được 2 tuần rồi. Dạo này mấy lá ở dưới bắt đầu bị vàng và rụng. Cho mình hỏi nguyên nhân do đâu và cách khắc phục với ạ?</p>
+                                    <span>10:45 AM</span>
+                                </div>
+                            </div>
+
+                            <!-- Msg Sent -->
+                            <div>
+                                <div>
+                                    <p>Chào anh An ạ! Rất xin lỗi về sự cố với cây. Thường lá vàng dưới gốc có thể do tưới quá nhiều hoặc thiếu sáng. Anh có thể chụp giúp em vị trí đặt cây và tình trạng đất được không ạ?</p>
+                                    <span>10:48 AM</span>
+                                </div>
+                                <div>MX</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Details Panel -->
+                    <div class="details-panel">
+                        <div>
+                            <img src="../assets/figma/39ce1dc7-e848-4955-a03e-421c98b8ef05.png" alt="Large">
+                        </div>
+                        <h2>Nguyễn Văn An</h2>
+                        <div>
+                            <img src="../assets/figma/a06e208e-a056-4e18-bb5c-76568a4682ce.svg" alt="C">
+                            <span>HẠNG: MẦM NON</span>
+                        </div>
+
+                        <div>
+                            <div>
+                                <span>THÔNG TIN LIÊN HỆ</span>
+                                <div>
+                                    <div>
+                                        <img src="../assets/figma/5b6c1587-c25a-4020-a2ca-cdf7999afc79.svg" alt="P"> 0908 123 456
+                                    </div>
+                                    <div>
+                                        <img src="../assets/figma/80e7abc7-9e89-4658-b8e3-4421f93b4a80.svg" alt="E"> an.nguyen@email.com
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div>
+                                    <span>ĐƠN HÀNG</span>
+                                    <span>08</span>
+                                </div>
+                                <div>
+                                    <span>TÍCH LŨY</span>
+                                    <span>1.2M</span>
+                                </div>
+                            </div>
+
+                            <button>Chỉnh sửa hồ sơ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/store.js"></script>
+    <script src="../js/admin_support.js"></script>
+</body>
+</html>

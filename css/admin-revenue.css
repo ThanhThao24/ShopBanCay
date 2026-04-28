@@ -1,0 +1,97 @@
+/* Revenue page helpers. The Figma export is mostly inline-styled; this file
+   keeps dynamic states consistent with the rest of the admin area. */
+
+.revenue-toast,
+.analytics-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #154212;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.nav-bg-hover {
+    display: none !important;
+    pointer-events: none;
+}
+
+.nav-bg-hover img {
+    display: none !important;
+}
+
+.admin-main img,
+.admin-sidebar img {
+    max-width: 100%;
+    flex-shrink: 0;
+}
+
+.admin-sidebar .nav-item > img {
+    width: 22px !important;
+    height: 22px !important;
+    object-fit: contain;
+}
+
+.admin-sidebar .nav-item > img[alt="Messages"] {
+    width: 22px !important;
+    height: 16px !important;
+}
+
+.admin-header img,
+.header-actions img,
+.filter-dropdown img,
+.export-btn img,
+.table-actions img,
+button img {
+    height: 18px !important;
+    object-fit: contain;
+}
+
+.search-bar img {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.filter-dropdown img,
+.header-actions img {
+    width: 18px !important;
+}
+
+.export-btn img {
+    width: 14px !important;
+    height: 14px !important;
+}
+
+.kpi-icon img,
+.chart-body img,
+.search-bar img,
+.header-actions img,
+.table-actions img {
+    display: block;
+    object-fit: contain;
+}
+
+.kpi-trend img {
+    width: 8px !important;
+    height: 8px !important;
+}
+
+.kpi-icon img {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.chart-body img[alt="Line"] {
+    max-height: 90px !important;
+    object-fit: contain;
+}
+
+.chart-body img[alt="Tooltip"] {
+    width: 79px !important;
+    height: 48px !important;
+}
