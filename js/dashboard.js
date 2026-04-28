@@ -1,126 +1,89 @@
 document.addEventListener('DOMContentLoaded', () => {
-    loadStats();
-    loadRecentOrders();
-    loadTopProducts();
-    initCharts();
-    initRefresh();
+  const store = window.MXStore;
+  const orders = store?.getOrders() || [];
+  const products = store?.getProducts() || [];
+
+  // ── Stat cards (4 in order: total sales, new orders, out-of-stock, revenue) ──
+  const statValues = document.querySelectorAll('.stat-card .stat-value');
+  const totalRevenue = orders.reduce((s, o) => s + (o.total || 0), 0);
+  const pendingOrders = orders.filter(o => ['pending', 'processing'].includes(o.status)).length;
+  const lowStock = products.filter(p => (p.stock || 0) < 10).length;
+
+  if (statValues[0]) statValues[0].textContent = fmtUSD(totalRevenue);
+  if (statValues[1]) statValues[1].textContent = orders.length;
+  if (statValues[2]) statValues[2].textContent = lowStock + ' món';
+  if (statValues[3]) statValues[3].textContent = fmtUSD(totalRevenue);
+
+  const trendSpans = document.querySelectorAll('.stat-trend');
+  if (trendSpans[0]) {
+    const growth = orders.length ? '+' + Math.round((pendingOrders / Math.max(orders.length, 1)) * 100) + '%' : '+0%';
+    trendSpans[0].textContent = growth;
+  }
+
+  // ── Recent orders list ──
+  const orderList = document.querySelector('.order-list-mini');
+  if (orderList && orders.length) {
+    const statusMap = {
+      pending: { text: 'Chờ xác nhận', cls: 'status-pending' },
+      processing: { text: 'Đang xử lý', cls: 'status-pending' },
+      shipping: { text: 'Đang giao', cls: 'status-pending' },
+      delivered: { text: 'Đã giao', cls: 'status-delivered' },
+      cancelled: { text: 'Đã hủy', cls: 'status-pending' },
+    };
+    orderList.innerHTML = orders.slice(0, 3).map(order => {
+      const item = order.items?.[0];
+      const img = item?.image ? '../' + item.image : '';
+      const st = statusMap[order.status] || statusMap.pending;
+      const amount = store ? store.formatPrice(order.total) : (order.total || 0).toLocaleString('vi-VN') + 'đ';
+      return `
+        <div class="order-item-mini" style="cursor:pointer;" onclick="window.location.href='admin_orders.html'">
+          <div class="order-item-img">
+            <img src="${img}" alt="Plant" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">
+          </div>
+          <div class="order-item-info">
+            <p class="order-item-name">${item?.name || order.customer || 'Đơn hàng'}</p>
+            <p class="order-item-meta">Đơn #${order.id} • ${amount}</p>
+          </div>
+          <span class="order-item-status ${st.cls}">${st.text}</span>
+        </div>`;
+    }).join('');
+  }
+
+  // ── Chart bars (animate from data) ──
+  const bars = document.querySelectorAll('.chart-bar');
+  if (bars.length && orders.length) {
+    const now = new Date();
+    const monthly = Array.from({ length: bars.length }, (_, i) => {
+      const m = (now.getMonth() - bars.length + 1 + i + 12) % 12;
+      return orders
+        .filter(o => new Date(o.date).getMonth() === m)
+        .reduce((s, o) => s + (o.total || 0), 0) || 20 + i * 5;
+    });
+    const max = Math.max(...monthly, 1);
+    bars.forEach((bar, i) => {
+      bar.style.height = Math.max(8, Math.round((monthly[i] / max) * 100)) + '%';
+    });
+  }
+
+  // ── Pagination ──
+  document.querySelectorAll('.page-num').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.page-num').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // ── Header search → go to orders ──
+  const searchInput = document.querySelector('.admin-search input');
+  if (searchInput) {
+    searchInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && searchInput.value.trim()) {
+        window.location.href = 'admin_orders.html';
+      }
+    });
+  }
+
+  function fmtUSD(val) {
+    return (val / 1000).toLocaleString('vi-VN', { maximumFractionDigits: 0 }) + ' $';
+  }
 });
-
-function loadStats() {
-    const orders = window.MXStore?.getOrders() || [];
-    const products = window.MXStore?.getProducts() || [];
-
-    const totalOrders = orders.length;
-    const totalRevenue = orders.reduce((sum, order) => sum + (order.total || 0), 0);
-    const pendingOrders = orders.filter(o => o.status === 'pending').length;
-    const lowStockProducts = products.filter(p => (p.stock || 0) < 10).length;
-
-    const statOrders = document.getElementById('stat-orders');
-    const statRevenue = document.getElementById('stat-revenue');
-    const statPending = document.getElementById('stat-pending');
-    const statLowStock = document.getElementById('stat-low-stock');
-
-    if (statOrders) statOrders.textContent = totalOrders;
-    if (statRevenue) statRevenue.textContent = window.MXStore?.formatPrice(totalRevenue) || totalRevenue.toLocaleString('vi-VN') + 'đ';
-    if (statPending) statPending.textContent = pendingOrders;
-    if (statLowStock) statLowStock.textContent = lowStockProducts;
-}
-
-function loadRecentOrders() {
-    const orders = window.MXStore?.getOrders() || [];
-    const list = document.getElementById('recent-orders-list');
-    if (!list) return;
-
-    list.innerHTML = orders.slice(0, 5).map(order => `
-        <div class="order-item" style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; cursor: pointer;" onclick="window.location.href='admin_orders.html'">
-            <span style="font-weight: 600;">#${order.id}</span>
-            <span>${order.customer || order.shipping?.fullname || 'Khách hàng'}</span>
-            <span style="color: #154212; font-weight: 600;">${window.MXStore?.formatPrice(order.total) || order.total}</span>
-        </div>
-    `).join('');
-}
-
-function loadTopProducts() {
-    const products = window.MXStore?.getProducts() || [];
-    const list = document.getElementById('top-products-list');
-    if (!list) return;
-
-    const sorted = products.sort((a, b) => (b.stock || 0) - (a.stock || 0)).slice(0, 5);
-    list.innerHTML = sorted.map(product => `
-        <div class="product-item" style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee;">
-            <span>${product.name}</span>
-            <span style="color: #2d5a27; font-weight: 600;">Tồn: ${product.stock || 0}</span>
-        </div>
-    `).join('');
-}
-
-function initCharts() {
-    const revenueCanvas = document.getElementById('revenue-chart');
-    const ordersCanvas = document.getElementById('orders-chart');
-    
-    if (revenueCanvas) drawRevenueChart(revenueCanvas);
-    if (ordersCanvas) drawOrdersChart(ordersCanvas);
-}
-
-function drawRevenueChart(canvas) {
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width = canvas.offsetWidth;
-    const height = canvas.height = 200;
-    
-    const data = [45, 52, 48, 65, 70, 68, 75];
-    const max = Math.max(...data);
-    const padding = 20;
-    
-    ctx.clearRect(0, 0, width, height);
-    ctx.strokeStyle = '#154212';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    
-    data.forEach((value, i) => {
-        const x = padding + (i * (width - 2 * padding) / (data.length - 1));
-        const y = height - padding - ((value / max) * (height - 2 * padding));
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    });
-    
-    ctx.stroke();
-}
-
-function drawOrdersChart(canvas) {
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width = canvas.offsetWidth;
-    const height = canvas.height = 200;
-    
-    const data = [12, 19, 15, 25, 22, 30, 28];
-    const max = Math.max(...data);
-    const barWidth = (width - 40) / data.length;
-    
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = '#2d5a27';
-    
-    data.forEach((value, i) => {
-        const barHeight = (value / max) * (height - 40);
-        const x = 20 + i * barWidth;
-        const y = height - 20 - barHeight;
-        ctx.fillRect(x, y, barWidth - 10, barHeight);
-    });
-}
-
-function initRefresh() {
-    const refreshBtn = document.getElementById('btn-refresh');
-    if (refreshBtn) {
-        refreshBtn.addEventListener('click', () => {
-            loadStats();
-            loadRecentOrders();
-            loadTopProducts();
-            showNotice('Đã làm mới dữ liệu', 'success');
-        });
-    }
-}
-
-function showNotice(message, type = 'info') {
-    const notice = document.createElement('div');
-    notice.textContent = message;
-    notice.style.cssText = `position: fixed; top: 20px; right: 20px; background: ${type === 'success' ? '#154212' : '#1f2937'}; color: white; padding: 10px 14px; border-radius: 8px; z-index: 9999;`;
-    document.body.appendChild(notice);
-    setTimeout(() => notice.remove(), 2000);
-}

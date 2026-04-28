@@ -1,109 +1,131 @@
 document.addEventListener('DOMContentLoaded', () => {
-    loadRevenueStats();
-    initRevenueChart();
-    initPeriodFilter();
-    initExport();
-});
+  const store = window.MXStore;
+  const orders = store?.getOrders() || [];
 
-function loadRevenueStats() {
-    const orders = window.MXStore?.getOrders() || [];
-    
-    const today = new Date();
-    const thisMonth = orders.filter(o => {
-        const orderDate = new Date(o.date);
-        return orderDate.getMonth() === today.getMonth();
-    });
-    
-    const lastMonth = orders.filter(o => {
-        const orderDate = new Date(o.date);
-        return orderDate.getMonth() === today.getMonth() - 1;
-    });
-    
-    const thisMonthRevenue = thisMonth.reduce((sum, o) => sum + (o.total || 0), 0);
-    const lastMonthRevenue = lastMonth.reduce((sum, o) => sum + (o.total || 0), 0);
-    const growth = lastMonthRevenue ? ((thisMonthRevenue - lastMonthRevenue) / lastMonthRevenue * 100).toFixed(1) : 0;
-    
-    document.getElementById('this-month-revenue').textContent = window.MXStore?.formatPrice(thisMonthRevenue) || '0đ';
-    document.getElementById('last-month-revenue').textContent = window.MXStore?.formatPrice(lastMonthRevenue) || '0đ';
-    document.getElementById('growth-rate').textContent = growth + '%';
-    document.getElementById('growth-rate').style.color = growth >= 0 ? '#154212' : '#60233e';
-}
+  // ── KPI cards ──
+  const kpiValues = document.querySelectorAll('.kpi-content .kpi-value');
+  const kpiTrends = document.querySelectorAll('.kpi-trend');
 
-function initRevenueChart() {
-    const canvas = document.getElementById('revenue-chart');
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width = canvas.offsetWidth;
-    const height = canvas.height = 300;
-    
-    const months = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
-    const data = [45, 52, 48, 65, 70, 68, 75, 72, 80, 85, 82, 90];
-    const max = Math.max(...data);
-    const padding = 40;
-    const barWidth = (width - 2 * padding) / data.length;
-    
-    ctx.clearRect(0, 0, width, height);
-    
-    ctx.fillStyle = '#2d5a27';
-    data.forEach((value, i) => {
-        const barHeight = (value / max) * (height - 2 * padding);
-        const x = padding + i * barWidth;
-        const y = height - padding - barHeight;
-        ctx.fillRect(x, y, barWidth - 5, barHeight);
-    });
-    
-    ctx.fillStyle = '#42493e';
-    ctx.font = '10px Inter';
-    months.forEach((month, i) => {
-        const x = padding + i * barWidth + barWidth / 2 - 10;
-        ctx.fillText(month, x, height - 10);
-    });
-}
+  const totalRevenue = orders.reduce((s, o) => s + (o.total || 0), 0);
+  const netProfit = Math.round(totalRevenue * 0.35);
+  const delivered = orders.filter(o => o.status === 'delivered').length;
+  const avgOrder = delivered ? Math.round(totalRevenue / delivered) : 0;
 
-function initPeriodFilter() {
-    const filterBtns = document.querySelectorAll('.period-filter-btn');
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            loadRevenueStats();
-            initRevenueChart();
-        });
-    });
-}
+  if (kpiValues[0]) kpiValues[0].textContent = fmt(totalRevenue);
+  if (kpiValues[1]) kpiValues[1].textContent = fmt(netProfit);
+  if (kpiValues[2]) kpiValues[2].textContent = delivered.toLocaleString('vi-VN');
+  if (kpiValues[3]) kpiValues[3].textContent = fmt(avgOrder);
 
-function initExport() {
-    const exportBtn = document.getElementById('btn-export-revenue');
-    if (exportBtn) {
-        exportBtn.addEventListener('click', () => {
-            const orders = window.MXStore?.getOrders() || [];
-            const csv = [
-                ['Tháng', 'Doanh thu', 'Số đơn'].join(','),
-                ...Array.from({ length: 12 }, (_, i) => {
-                    const monthOrders = orders.filter(o => new Date(o.date).getMonth() === i);
-                    const revenue = monthOrders.reduce((sum, o) => sum + (o.total || 0), 0);
-                    return [`Tháng ${i + 1}`, revenue, monthOrders.length].join(',');
-                })
-            ].join('\n');
-            
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'revenue-' + Date.now() + '.csv';
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            showNotice('Đã xuất báo cáo doanh thu', 'success');
-        });
+  // Growth % on card 0 trend badge
+  const now = new Date();
+  const thisM = now.getMonth();
+  const lastM = (thisM + 11) % 12;
+  const thisMonthRev = orders
+    .filter(o => new Date(o.date).getMonth() === thisM)
+    .reduce((s, o) => s + (o.total || 0), 0);
+  const lastMonthRev = orders
+    .filter(o => new Date(o.date).getMonth() === lastM)
+    .reduce((s, o) => s + (o.total || 0), 0);
+  if (kpiTrends[0]) {
+    const pct = lastMonthRev
+      ? ((thisMonthRev - lastMonthRev) / lastMonthRev * 100).toFixed(1)
+      : '0';
+    const span = kpiTrends[0].querySelector('span');
+    if (span) span.textContent = (parseFloat(pct) >= 0 ? '+' : '') + pct + '%';
+    kpiTrends[0].className = 'kpi-trend ' + (parseFloat(pct) >= 0 ? 'positive' : 'negative');
+  }
+
+  // ── Transaction table ──
+  const transBody = document.querySelector('.transaction-table-area table tbody');
+  if (transBody && orders.length) {
+    const statusMap = {
+      pending: 'Chờ xác nhận',
+      processing: 'Đang xử lý',
+      shipping: 'Đang giao',
+      delivered: 'Hoàn tất',
+      cancelled: 'Đã hủy'
+    };
+    transBody.innerHTML = orders.slice(0, 20).map(order => {
+      const customer = order.customer || order.shipping?.fullname || 'Khách hàng';
+      const dateObj = new Date(order.date);
+      const dateStr = isNaN(dateObj) ? (order.date || '—') : dateObj.toLocaleDateString('vi-VN');
+      const statusText = statusMap[order.status] || order.status || '—';
+      return `
+        <tr>
+          <td>#${order.id}</td>
+          <td>${dateStr}</td>
+          <td>${customer}</td>
+          <td><div><span>—</span></div></td>
+          <td>${fmt(order.total)}</td>
+          <td><div>${statusText}</div></td>
+          <td><button><img src="../assets/figma/55677778-0ee0-4163-96ad-8e0ff09bb2c1.svg" alt="More"></button></td>
+        </tr>`;
+    }).join('');
+
+    const paginInfo = document.querySelector('.table-pagination > span');
+    if (paginInfo) {
+      paginInfo.textContent = `Hiển thị 1–${Math.min(20, orders.length)} trong số ${orders.length.toLocaleString('vi-VN')} giao dịch`;
     }
-}
+  }
 
-function showNotice(message, type = 'info') {
-    const notice = document.createElement('div');
-    notice.textContent = message;
-    notice.style.cssText = `position: fixed; top: 20px; right: 20px; background: ${type === 'success' ? '#154212' : '#1f2937'}; color: white; padding: 10px 14px; border-radius: 8px; z-index: 9999;`;
-    document.body.appendChild(notice);
-    setTimeout(() => notice.remove(), 2000);
-}
+  // ── Search ──
+  const searchInput = document.querySelector('.search-wrap input');
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase();
+      document.querySelectorAll('.transaction-table-area table tbody tr').forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    });
+  }
+
+  // ── Chart period filter ──
+  const chartBtns = document.querySelectorAll('.chart-filters button');
+  chartBtns.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      chartBtns.forEach((b, j) => {
+        b.style.backgroundColor = j === i ? '#154212' : '';
+        b.style.color = j === i ? '#fff' : '';
+      });
+    });
+  });
+  // Activate first button by default
+  if (chartBtns[0]) {
+    chartBtns[0].style.backgroundColor = '#154212';
+    chartBtns[0].style.color = '#fff';
+  }
+
+  // ── Export ──
+  document.querySelector('.export-btn')?.addEventListener('click', () => {
+    const rows = [['Mã đơn', 'Ngày', 'Khách hàng', 'Tổng tiền', 'Trạng thái'].join(',')];
+    orders.forEach(o => {
+      rows.push([
+        '#' + o.id,
+        o.date || '',
+        (o.customer || o.shipping?.fullname || '').replace(/,/g, ' '),
+        o.total || 0,
+        o.status || ''
+      ].join(','));
+    });
+    const blob = new Blob(['﻿' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'revenue-' + Date.now() + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('Đã xuất báo cáo doanh thu');
+  });
+
+  function fmt(val) {
+    return (val || 0).toLocaleString('vi-VN') + '₫';
+  }
+
+  function toast(msg) {
+    const el = document.createElement('div');
+    el.textContent = msg;
+    el.className = 'revenue-toast';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2500);
+  }
+});

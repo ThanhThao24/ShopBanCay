@@ -1,104 +1,132 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const STORAGE_KEY = 'mamxanh_support';
-    const tableBody = document.querySelector('.data-table tbody');
-    
-    let tickets = loadTickets();
-    renderTickets();
+  const STORAGE_KEY = 'mamxanh_support_tickets';
 
-    function loadTickets() {
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) return JSON.parse(stored);
-        } catch {}
-        
-        return [
-            { id: 'SUP-001', customer: 'Nguyễn Văn A', email: 'a@example.com', subject: 'Hỏi về giao hàng', message: 'Đơn hàng của tôi đến khi nào?', status: 'pending', date: '2026-04-27' },
-            { id: 'SUP-002', customer: 'Trần Thị B', email: 'b@example.com', subject: 'Cây bị héo', message: 'Cây tôi mua bị héo lá', status: 'resolved', date: '2026-04-26' }
-        ];
-    }
+  function loadTickets() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; }
+  }
 
-    function saveTickets() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets));
-    }
+  function saveTickets(tickets) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets));
+  }
 
-    function renderTickets() {
-        if (!tableBody) return;
-        tableBody.innerHTML = tickets.map((ticket, i) => `
-            <tr data-id="${ticket.id}">
-                <td>${ticket.id}</td>
-                <td>${ticket.customer}</td>
-                <td>${ticket.subject}</td>
-                <td><span class="status-badge ${ticket.status === 'resolved' ? 'resolved' : 'pending'}">${ticket.status === 'resolved' ? 'Đã xử lý' : 'Chờ xử lý'}</span></td>
-                <td>${ticket.date}</td>
-                <td class="actions">
-                    <button class="btn-view" data-index="${i}" title="Xem">👁️</button>
-                    <button class="btn-reply" data-index="${i}" title="Trả lời">💬</button>
-                    <button class="btn-resolve" data-index="${i}" title="Đánh dấu xử lý">✅</button>
-                </td>
-            </tr>
-        `).join('');
+  function updateStats(tickets) {
+    const statValues = document.querySelectorAll('.support-stats .stat-value');
+    if (statValues[0]) statValues[0].textContent = tickets.length.toLocaleString('vi-VN');
+    if (statValues[1]) statValues[1].textContent = tickets.filter(t => t.status === 'pending').length;
+    if (statValues[2]) statValues[2].textContent = tickets.filter(t => t.status === 'consulting').length;
+  }
 
-        tableBody.querySelectorAll('.btn-view').forEach(btn => {
-            btn.addEventListener('click', () => viewTicket(parseInt(btn.dataset.index)));
-        });
+  let tickets = loadTickets();
+  updateStats(tickets);
 
-        tableBody.querySelectorAll('.btn-reply').forEach(btn => {
-            btn.addEventListener('click', () => replyTicket(parseInt(btn.dataset.index)));
-        });
-
-        tableBody.querySelectorAll('.btn-resolve').forEach(btn => {
-            btn.addEventListener('click', () => resolveTicket(parseInt(btn.dataset.index)));
-        });
-    }
-
-    function viewTicket(index) {
-        const ticket = tickets[index];
-        alert(`${ticket.subject}\n\nTừ: ${ticket.customer} (${ticket.email})\n\n${ticket.message}`);
-    }
-
-    function replyTicket(index) {
-        const ticket = tickets[index];
-        const reply = prompt(`Trả lời cho ${ticket.customer}:`);
-        if (reply) {
-            ticket.reply = reply;
-            ticket.status = 'resolved';
-            saveTickets();
-            renderTickets();
-            showNotice('Đã gửi phản hồi', 'success');
-        }
-    }
-
-    function resolveTicket(index) {
-        tickets[index].status = tickets[index].status === 'resolved' ? 'pending' : 'resolved';
-        saveTickets();
-        renderTickets();
-        showNotice('Đã cập nhật trạng thái', 'success');
-    }
-
-    document.querySelectorAll('.filter-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            
-            const filter = tab.textContent.toLowerCase();
-            const rows = tableBody.querySelectorAll('tr');
-            
-            rows.forEach(row => {
-                if (filter === 'tất cả') {
-                    row.style.display = '';
-                } else {
-                    const status = row.querySelector('.status-badge').textContent.toLowerCase();
-                    row.style.display = status.includes(filter) ? '' : 'none';
-                }
-            });
-        });
+  // ── Inbox item click → active + update chat header ──
+  const inboxItems = document.querySelectorAll('.inbox-item');
+  inboxItems.forEach(item => {
+    item.style.cursor = 'pointer';
+    item.addEventListener('click', () => {
+      inboxItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      const name = item.querySelector('.customer-name')?.textContent;
+      if (name) {
+        const chatNameEl = document.querySelector('.chat-user-info h4');
+        if (chatNameEl) chatNameEl.textContent = name;
+      }
     });
+  });
 
-    function showNotice(message, type = 'info') {
-        const notice = document.createElement('div');
-        notice.textContent = message;
-        notice.style.cssText = `position: fixed; top: 20px; right: 20px; background: ${type === 'success' ? '#154212' : '#1f2937'}; color: white; padding: 10px 14px; border-radius: 8px; z-index: 9999;`;
-        document.body.appendChild(notice);
-        setTimeout(() => notice.remove(), 2000);
+  // ── Inject chat input at bottom of chat panel ──
+  const chatPanel = document.querySelector('.chat-panel');
+  if (chatPanel && !chatPanel.querySelector('.chat-input-area')) {
+    const inputArea = document.createElement('div');
+    inputArea.className = 'chat-input-area';
+    inputArea.style.cssText = [
+      'display:flex',
+      'gap:8px',
+      'padding:16px',
+      'border-top:1px solid #f4f4ef',
+      'background:#fff',
+      'flex-shrink:0'
+    ].join(';');
+    inputArea.innerHTML = `
+      <input type="text" placeholder="Nhập phản hồi..." class="chat-input-field"
+        style="flex:1;border:1px solid #e7e5e4;border-radius:9999px;padding:10px 16px;font-family:Inter,sans-serif;font-size:14px;color:#1a1c19;outline:none;">
+      <button class="chat-send-btn"
+        style="background:#154212;color:#fff;border:none;border-radius:9999px;padding:10px 20px;font-family:Inter,sans-serif;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;">
+        Gửi
+      </button>`;
+    chatPanel.appendChild(inputArea);
+
+    const field = inputArea.querySelector('.chat-input-field');
+    const sendBtn = inputArea.querySelector('.chat-send-btn');
+
+    function sendMessage() {
+      const text = field.value.trim();
+      if (!text) return;
+      const chatArea = document.querySelector('.chat-area');
+      if (chatArea) {
+        const now = new Date();
+        const h = now.getHours();
+        const m = String(now.getMinutes()).padStart(2, '0');
+        const timeStr = `${h}:${m} ${h < 12 ? 'AM' : 'PM'}`;
+        const msgEl = document.createElement('div');
+        msgEl.className = 'chat-message message-sent';
+        msgEl.innerHTML = `
+          <div class="message-bubble">
+            <p>${text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+            <span class="msg-time">${timeStr}</span>
+          </div>
+          <div class="admin-avatar">MX</div>`;
+        chatArea.appendChild(msgEl);
+        chatArea.scrollTop = chatArea.scrollHeight;
+      }
+      field.value = '';
     }
+
+    sendBtn.addEventListener('click', sendMessage);
+    field.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
+  }
+
+  // ── New ticket button ──
+  document.querySelector('.btn-new-ticket')?.addEventListener('click', () => {
+    const customer = prompt('Tên khách hàng:');
+    if (!customer?.trim()) return;
+    const subject = prompt('Chủ đề hỗ trợ:');
+    if (!subject?.trim()) return;
+    tickets.unshift({
+      id: 'TK-' + Date.now(),
+      customer: customer.trim(),
+      subject: subject.trim(),
+      status: 'pending',
+      date: new Date().toISOString()
+    });
+    saveTickets(tickets);
+    updateStats(tickets);
+    toast('Đã tạo ticket: ' + customer.trim());
+  });
+
+  // ── Purchase history → orders page ──
+  document.querySelector('.btn-purchase-history')?.addEventListener('click', () => {
+    window.location.href = 'admin_orders.html';
+  });
+
+  // ── Header search filters inbox ──
+  const searchInput = document.querySelector('.admin-search input');
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase();
+      document.querySelectorAll('.inbox-item').forEach(item => {
+        const name = item.querySelector('.customer-name')?.textContent.toLowerCase() || '';
+        const preview = item.querySelector('.message-preview')?.textContent.toLowerCase() || '';
+        item.style.display = (!q || name.includes(q) || preview.includes(q)) ? '' : 'none';
+      });
+    });
+  }
+
+  function toast(msg) {
+    const el = document.createElement('div');
+    el.textContent = msg;
+    el.style.cssText = 'position:fixed;top:20px;right:20px;background:#154212;color:#fff;padding:10px 14px;border-radius:8px;z-index:9999;font-family:Inter,sans-serif;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,.2)';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2500);
+  }
 });

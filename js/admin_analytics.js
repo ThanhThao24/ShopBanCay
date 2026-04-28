@@ -1,135 +1,115 @@
 document.addEventListener('DOMContentLoaded', () => {
-    loadAnalytics();
-    initCharts();
-    initDateFilter();
-    initExport();
+  const store = window.MXStore;
+  const orders = store?.getOrders() || [];
+  const products = store?.getProducts() || [];
+
+  // ── KPI cards ──
+  // Structure: .kpi-header > div:first-child > div (the value div, sibling of h3)
+  const kpiValueDivs = document.querySelectorAll('.kpi-card .kpi-header > div:first-child > div');
+
+  const customerSet = new Set(
+    orders.map(o => o.customer || o.shipping?.fullname).filter(Boolean)
+  );
+  const newCustomers = customerSet.size;
+
+  // Retention: customers who placed more than 1 order
+  const ordersByCustomer = {};
+  orders.forEach(o => {
+    const key = o.customer || o.shipping?.fullname;
+    if (key) ordersByCustomer[key] = (ordersByCustomer[key] || 0) + 1;
+  });
+  const repeatCount = Object.values(ordersByCustomer).filter(c => c > 1).length;
+  const retentionRate = newCustomers ? Math.round((repeatCount / newCustomers) * 100) : 0;
+
+  // LTV: total revenue / unique customers
+  const totalRevenue = orders.reduce((s, o) => s + (o.total || 0), 0);
+  const ltv = newCustomers ? Math.round(totalRevenue / newCustomers) : 0;
+
+  if (kpiValueDivs[0]) kpiValueDivs[0].textContent = newCustomers.toLocaleString('vi-VN');
+  if (kpiValueDivs[1]) kpiValueDivs[1].textContent = retentionRate + '%';
+  if (kpiValueDivs[2]) kpiValueDivs[2].textContent = (ltv / 1_000_000).toFixed(1) + 'M ₫';
+
+  // Update donut chart % text
+  const donutPct = document.querySelector('.donut-chart > div > div:nth-child(2)');
+  if (donutPct) donutPct.textContent = retentionRate + '%';
+
+  // ── Top products from order items ──
+  const productSales = {};
+  const productRevenue = {};
+  orders.forEach(o => {
+    (o.items || []).forEach(item => {
+      const key = item.id || item.name;
+      if (!key) return;
+      productSales[key] = (productSales[key] || 0) + (item.qty || item.quantity || 1);
+      productRevenue[key] = (productRevenue[key] || 0) +
+        (item.price || 0) * (item.qty || item.quantity || 1);
+    });
+  });
+
+  const productList = document.querySelector('.product-list');
+  if (productList && Object.keys(productSales).length) {
+    const topIds = Object.keys(productSales)
+      .sort((a, b) => productSales[b] - productSales[a])
+      .slice(0, 3);
+
+    productList.innerHTML = topIds.map(pid => {
+      const prod = products.find(p => p.id === pid || p.name === pid);
+      const name = prod?.name || pid;
+      const imgTag = prod?.image
+        ? `<img src="../${prod.image}" alt="${name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">`
+        : '';
+      const category = prod?.category || 'Sản phẩm';
+      const sold = productSales[pid];
+      const rev = productRevenue[pid];
+      const revStr = rev >= 1_000_000
+        ? (rev / 1_000_000).toFixed(1) + 'M ₫'
+        : (rev / 1000).toFixed(0) + 'k ₫';
+      return `
+        <div class="product-item">
+          <div class="product-img">${imgTag}</div>
+          <div class="product-info">
+            <h4>${name}</h4>
+            <p>${category}</p>
+          </div>
+          <div class="product-stats">
+            <span>${sold}</span>
+            <span>Đã bán</span>
+          </div>
+          <div class="product-revenue">
+            <span>${revStr}</span>
+            <span>Doanh thu</span>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── Export ──
+  document.querySelector('.export-btn')?.addEventListener('click', () => {
+    const rows = [['Mã đơn', 'Ngày', 'Khách hàng', 'Tổng tiền', 'Trạng thái'].join(',')];
+    orders.forEach(o => {
+      rows.push([
+        '#' + o.id,
+        o.date || '',
+        (o.customer || o.shipping?.fullname || '').replace(/,/g, ' '),
+        o.total || 0,
+        o.status || ''
+      ].join(','));
+    });
+    const blob = new Blob(['﻿' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'analytics-' + Date.now() + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('Đã xuất báo cáo');
+  });
+
+  function toast(msg) {
+    const el = document.createElement('div');
+    el.textContent = msg;
+    el.className = 'analytics-toast';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2500);
+  }
 });
-
-function loadAnalytics() {
-    const orders = window.MXStore?.getOrders() || [];
-    const products = window.MXStore?.getProducts() || [];
-
-    const totalRevenue = orders.reduce((sum, o) => sum + (o.total || 0), 0);
-    const avgOrderValue = orders.length ? totalRevenue / orders.length : 0;
-    const topProduct = products.sort((a, b) => (b.stock || 0) - (a.stock || 0))[0];
-
-    document.getElementById('total-revenue').textContent = window.MXStore?.formatPrice(totalRevenue) || '0đ';
-    document.getElementById('avg-order').textContent = window.MXStore?.formatPrice(avgOrderValue) || '0đ';
-    document.getElementById('top-product').textContent = topProduct?.name || 'N/A';
-}
-
-function initCharts() {
-    const salesCanvas = document.getElementById('sales-chart');
-    const categoryCanvas = document.getElementById('category-chart');
-    
-    if (salesCanvas) drawSalesChart(salesCanvas);
-    if (categoryCanvas) drawCategoryChart(categoryCanvas);
-}
-
-function drawSalesChart(canvas) {
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width = canvas.offsetWidth;
-    const height = canvas.height = 250;
-    
-    const data = [30, 45, 38, 55, 62, 58, 70, 65, 75, 80, 72, 85];
-    const max = Math.max(...data);
-    const padding = 30;
-    
-    ctx.clearRect(0, 0, width, height);
-    ctx.strokeStyle = '#154212';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    
-    data.forEach((value, i) => {
-        const x = padding + (i * (width - 2 * padding) / (data.length - 1));
-        const y = height - padding - ((value / max) * (height - 2 * padding));
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    });
-    
-    ctx.stroke();
-    
-    ctx.fillStyle = 'rgba(21, 66, 18, 0.1)';
-    ctx.lineTo(width - padding, height - padding);
-    ctx.lineTo(padding, height - padding);
-    ctx.closePath();
-    ctx.fill();
-}
-
-function drawCategoryChart(canvas) {
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width = canvas.offsetWidth;
-    const height = canvas.height = 250;
-    
-    const categories = [
-        { name: 'Trong nhà', value: 45, color: '#154212' },
-        { name: 'Ngoài trời', value: 30, color: '#2d5a27' },
-        { name: 'Phong thủy', value: 25, color: '#f2ddc0' }
-    ];
-    
-    const total = categories.reduce((sum, c) => sum + c.value, 0);
-    let startAngle = -Math.PI / 2;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const radius = Math.min(width, height) / 2 - 20;
-    
-    ctx.clearRect(0, 0, width, height);
-    
-    categories.forEach(cat => {
-        const sliceAngle = (cat.value / total) * 2 * Math.PI;
-        ctx.fillStyle = cat.color;
-        ctx.beginPath();
-        ctx.moveTo(centerX, centerY);
-        ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
-        ctx.closePath();
-        ctx.fill();
-        startAngle += sliceAngle;
-    });
-}
-
-function initDateFilter() {
-    const filterBtns = document.querySelectorAll('.date-filter-btn');
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            loadAnalytics();
-            initCharts();
-        });
-    });
-}
-
-function initExport() {
-    const exportBtn = document.getElementById('btn-export');
-    if (exportBtn) {
-        exportBtn.addEventListener('click', () => {
-            const orders = window.MXStore?.getOrders() || [];
-            const csv = [
-                ['Mã đơn', 'Khách hàng', 'Tổng tiền', 'Ngày'].join(','),
-                ...orders.map(o => [
-                    o.id,
-                    o.customer || o.shipping?.fullname || '',
-                    o.total,
-                    o.date
-                ].join(','))
-            ].join('\n');
-            
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'analytics-' + Date.now() + '.csv';
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            showNotice('Đã xuất báo cáo', 'success');
-        });
-    }
-}
-
-function showNotice(message, type = 'info') {
-    const notice = document.createElement('div');
-    notice.textContent = message;
-    notice.style.cssText = `position: fixed; top: 20px; right: 20px; background: ${type === 'success' ? '#154212' : '#1f2937'}; color: white; padding: 10px 14px; border-radius: 8px; z-index: 9999;`;
-    document.body.appendChild(notice);
-    setTimeout(() => notice.remove(), 2000);
-}
