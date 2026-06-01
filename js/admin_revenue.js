@@ -45,19 +45,27 @@ document.addEventListener('DOMContentLoaded', () => {
       delivered: 'Hoàn tất',
       cancelled: 'Đã hủy'
     };
+    const paymentMap = {
+      bank: { icon: '../assets/figma/117b96bf-6458-4b8a-bdad-124ce72870f0.svg', label: 'Chuyển khoản' },
+      card: { icon: '../assets/figma/5b6cc4a3-faf0-44cc-98a0-d71b9c837f42.svg', label: 'Thẻ nội địa' },
+      momo: { icon: '../assets/figma/bd567df6-1ecb-49a9-a7db-33b93b53a141.svg', label: 'Momo' },
+      cod:  { icon: '../assets/figma/49331833-67e1-4f77-a07a-6606a3a03ac8.svg', label: 'COD' },
+    };
     transBody.innerHTML = orders.slice(0, 20).map(order => {
       const customer = order.customer || order.shipping?.fullname || 'Khách hàng';
       const dateObj = new Date(order.date);
       const dateStr = isNaN(dateObj) ? (order.date || '—') : dateObj.toLocaleDateString('vi-VN');
-      const statusText = statusMap[order.status] || order.status || '—';
+      const statusKey = order.status || 'pending';
+      const statusText = statusMap[statusKey] || statusKey;
+      const pm = paymentMap[order.payment] || paymentMap.bank;
       return `
         <tr>
           <td>#${order.id}</td>
           <td>${dateStr}</td>
           <td>${customer}</td>
-          <td><div><span>—</span></div></td>
+          <td><div><img src="${pm.icon}" alt="${pm.label}"><span>${pm.label}</span></div></td>
           <td>${fmt(order.total)}</td>
-          <td><div>${statusText}</div></td>
+          <td><span class="rev-status ${statusKey}">${statusText}</span></td>
           <td><button><img src="../assets/figma/55677778-0ee0-4163-96ad-8e0ff09bb2c1.svg" alt="More"></button></td>
         </tr>`;
     }).join('');

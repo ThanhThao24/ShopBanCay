@@ -512,14 +512,16 @@ svg.icon-safe {
 
 .brand-header {
     margin-bottom: 48px;
-    margin-left: -104px;
-    height: 152px;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
-.auth-login .brand-header {
-    margin-left: -20px;
-    margin-right: 20px;
+.auth-login .brand-header,
+.auth-register .brand-header {
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .auth-title {
@@ -527,19 +529,10 @@ svg.icon-safe {
     font-size: 48px;
     font-weight: 700;
     letter-spacing: -1px;
-    line-height: 28px;
+    line-height: 1.1;
     color: #000;
-    margin-bottom: 0;
-    position: absolute;
-    left: 335px;
-    top: 16px;
-    transform: translate(-50%, -50%);
-    width: 240px;
+    margin-bottom: 8px;
     text-align: center;
-}
-
-.auth-login .auth-title {
-    left: 244px;
 }
 
 .auth-subtitle {
@@ -547,19 +540,9 @@ svg.icon-safe {
     font-size: 32px;
     font-weight: 700;
     letter-spacing: -1px;
-    line-height: 28px;
+    line-height: 1.2;
     color: #000;
-    position: absolute;
-    left: 334.5px;
-    top: 84.5px;
-    transform: translate(-50%, -50%);
     text-align: center;
-    white-space: nowrap;
-}
-
-.auth-login .auth-subtitle {
-    left: 244px;
-    top: 76px;
 }
 
 .auth-login .auth-subtitle,

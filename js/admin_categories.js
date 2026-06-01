@@ -54,8 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderCategories() {
     if (!tbody) return;
     tbody.innerHTML = categories.map((cat, i) => {
-      const imgTag = cat.image
-        ? `<img src="../${cat.image}" alt="${cat.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">`
+      const imgSrc = cat.img || cat.image || '';
+      const imgTag = imgSrc
+        ? `<img src="../${imgSrc}" alt="${cat.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">`
         : '';
       const isActive = cat.active !== false;
       const statusCls = isActive ? 'bg-green-light text-green-light' : 'bg-gray-light';

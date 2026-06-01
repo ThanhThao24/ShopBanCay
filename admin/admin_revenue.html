@@ -247,16 +247,13 @@
                                 <div></div>
                             </div>
                             
-                            <!-- Graph line mock -->
-                            <div>
-                                <img src="../assets/figma/634e1191-ad40-49a8-936a-0159367873e3.svg" alt="Line">
-                                <img src="../assets/figma/74aafe36-def8-490d-b1c3-58049dde11ce.svg" alt="Line">
-                                <img src="../assets/figma/1cd2886c-d0e4-46a2-b3e3-119b4ff7d4cb.svg" alt="Line">
-                                <img src="../assets/figma/5b0cbf2c-bc10-435d-833e-df1b39df2cbe.svg" alt="Line">
-                                
-                                <!-- Tooltip Mock -->
-                                <div>
-                                    <img src="../assets/figma/68c18659-ad94-4386-91d9-23ec20bffbf7.svg" alt="Tooltip">
+                            <div class="revenue-chart-visual" aria-label="Đường biểu diễn doanh thu tháng 5">
+                                <svg viewBox="0 0 560 190" role="img" aria-hidden="true">
+                                    <path class="revenue-area" d="M0 128 C56 104 84 126 128 94 C170 64 206 94 242 122 C280 152 312 140 350 82 C388 24 430 30 468 74 C496 106 526 86 560 58 L560 190 L0 190 Z" />
+                                    <path class="revenue-line" d="M0 128 C56 104 84 126 128 94 C170 64 206 94 242 122 C280 152 312 140 350 82 C388 24 430 30 468 74 C496 106 526 86 560 58" />
+                                    <circle cx="350" cy="82" r="5" />
+                                </svg>
+                                <div class="revenue-tooltip">
                                     <span>120Tr VNĐ</span>
                                 </div>
                             </div>
@@ -373,9 +370,7 @@
                                     </div>
                                 </td>
                                 <td>2.450.000₫</td>
-                                <td>
-                                    <div>Hoàn<br>tất</div>
-                                </td>
+                                <td><span class="rev-status delivered">Hoàn tất</span></td>
                                 <td>
                                     <button>
                                         <img src="../assets/figma/55677778-0ee0-4163-96ad-8e0ff09bb2c1.svg" alt="More">
@@ -394,9 +389,7 @@
                                     </div>
                                 </td>
                                 <td>890.000₫</td>
-                                <td>
-                                    <div>Đang xử<br>lý</div>
-                                </td>
+                                <td><span class="rev-status processing">Đang xử lý</span></td>
                                 <td>
                                     <button>
                                         <img src="../assets/figma/55677778-0ee0-4163-96ad-8e0ff09bb2c1.svg" alt="More">
@@ -415,9 +408,7 @@
                                     </div>
                                 </td>
                                 <td>1.200.000₫</td>
-                                <td>
-                                    <div>Hoàn<br>tất</div>
-                                </td>
+                                <td><span class="rev-status delivered">Hoàn tất</span></td>
                                 <td>
                                     <button>
                                         <img src="../assets/figma/55677778-0ee0-4163-96ad-8e0ff09bb2c1.svg" alt="More">
@@ -436,9 +427,7 @@
                                     </div>
                                 </td>
                                 <td>550.000₫</td>
-                                <td>
-                                    <div>Đã<br>hủy</div>
-                                </td>
+                                <td><span class="rev-status cancelled">Đã hủy</span></td>
                                 <td>
                                     <button>
                                         <img src="../assets/figma/55677778-0ee0-4163-96ad-8e0ff09bb2c1.svg" alt="More">

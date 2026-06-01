@@ -77,6 +77,10 @@ button img {
     object-fit: cover !important;
 }
 
+.product-img.image-missing {
+    background: #f4f4ef url("../assets/figma/admin-fallback-icon.svg") center / 24px 24px no-repeat;
+}
+
 .trend img {
     width: 12px !important;
     height: 12px !important;
@@ -430,6 +434,7 @@ button img {
     border-radius: 12px;
     overflow: hidden;
     flex-shrink: 0;
+    background-color: #f4f4ef;
 }
 
 .product-img img {

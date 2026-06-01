@@ -356,3 +356,17 @@
     color: #42493e;
     padding: 0 4px;
 }
+
+/* Avatar color palette — named for static rows, c0–c4 cycle for dynamic rows */
+.avatar-nh, .avatar-c0 { background-color: #bcf0ae; color: #154212; }
+.avatar-tl, .avatar-c1 { background-color: #f5dfc3; color: #6b5c46; }
+.avatar-lm, .avatar-c2 { background-color: #ffd9e4; color: #60233e; }
+.avatar-pv, .avatar-c3 { background-color: rgba(21,66,18,0.1); color: #154212; }
+.avatar-kd, .avatar-c4 { background-color: #e3e3de; color: #42493e; }
+
+/* Status badge color variants */
+.status-badge.delivered { background-color: rgba(45,90,39,0.1); color: #2d5a27; }
+.status-badge.pending   { background-color: rgba(242,221,192,0.3); color: #6b5c46; }
+.status-badge.processing { background-color: rgba(21,66,18,0.05); color: #2d5a27; }
+.status-badge.shipping  { background-color: rgba(21,66,18,0.1); color: #154212; }
+.status-badge.cancelled { background-color: rgba(255,218,214,0.2); color: #ba1a1a; }

@@ -49,10 +49,16 @@ document.addEventListener('DOMContentLoaded', () => {
       '../assets/figma/3d8000fe-e5ca-41e1-b2f5-6bf86352827b.svg',
       '../assets/figma/6002c68d-0c6a-46a6-832f-62c6fa671152.svg'
     ];
+    const statusMap = {
+      running:   { cls: 'bg-green-light text-green-light',   text: 'Đang Chạy' },
+      scheduled: { cls: 'bg-yellow text-brown',              text: 'Lên lịch' },
+      expired:   { cls: 'bg-gray-light text-gray',           text: 'Hết hạn' },
+      paused:    { cls: 'bg-gray-light',                     text: 'Tạm Dừng' },
+    };
     tbody.innerHTML = promotions.map((promo, i) => {
-      const isRunning = promo.status === 'running';
-      const statusCls = isRunning ? 'bg-green-light text-green-light' : 'bg-gray-light';
-      const statusText = isRunning ? 'Đang Chạy' : 'Tạm Dừng';
+      const st = statusMap[promo.status] || statusMap.paused;
+      const statusCls = st.cls;
+      const statusText = st.text;
       const discountText = promo.type === 'percent'
         ? `Phần trăm (${promo.value}%)`
         : `Số tiền (${Math.round((promo.value || 0) / 1000)}k)`;

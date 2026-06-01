@@ -3,6 +3,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const orders = store?.getOrders() || [];
   const products = store?.getProducts() || [];
 
+  // Hardcoded fallbacks — used when stored products are stale or missing
+  const PRODUCT_FALLBACKS = {
+    'bang-singapore':    { name: 'Bàng Singapore',     category: 'Cây trong nhà',  image: 'assets/figma/7362ee9c-83cb-4db8-b1a7-3bef2b33f6cc.png' },
+    'trau-ba-la-xe':     { name: 'Trầu Bà lá xẻ Thái', category: 'Cây trong nhà',  image: 'assets/figma/cart-trau-ba.png' },
+    'luoi-ho-laurenti':  { name: 'Lưỡi hổ Laurenti',   category: 'Dễ chăm sóc',    image: 'assets/figma/0b792e64-6674-4316-9236-44d2610b4b45.jpg' },
+    'lan-y':             { name: 'Lan Ý',              category: 'Lọc không khí',  image: 'assets/figma/3cf2e8de-c0b8-4135-8dbd-c93a05c3e6b8.png' },
+    'kim-tien':          { name: 'Cây Kim Tiền',       category: 'Phong thủy',     image: 'assets/figma/91a02e1e-fd77-4e16-bb9f-b2b696737138.jpg' },
+    'sen-da':            { name: 'Sen đá',             category: 'Để bàn',         image: 'assets/figma/9697633d-bdd7-44be-8f07-987a08b66ae7.jpg' },
+    'o-liu-lun':         { name: 'Ô liu lùn',          category: 'Ngoài trời',     image: 'assets/figma/18f92f04-c249-4b0b-a048-bbe229c443ce.png' },
+    'duoi-cong':         { name: 'Đuôi công',          category: 'Cây trong nhà',  image: 'assets/figma/c3d6e4b9-f8cb-4f90-9b72-0f95c37db2d2.png' },
+    'bo-ba-sa-mac':      { name: 'Bộ ba Sa mạc',       category: 'Để bàn',         image: 'assets/figma/402ccd75-5842-4a4d-a2ca-6784c0e5d07a.jpg' },
+  };
+  const FALLBACK_IMG = '../assets/figma/6e589377-22cf-4778-8adf-97d4de3f388f.jpg';
+
   // ── KPI cards ──
   // Structure: .kpi-header > div:first-child > div (the value div, sibling of h3)
   const kpiValueDivs = document.querySelectorAll('.kpi-card .kpi-header > div:first-child > div');
@@ -54,11 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     productList.innerHTML = topIds.map(pid => {
       const prod = products.find(p => p.id === pid || p.name === pid);
-      const name = prod?.name || pid;
-      const imgTag = prod?.image
-        ? `<img src="../${prod.image}" alt="${name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">`
-        : '';
-      const category = prod?.category || 'Sản phẩm';
+      const fb = PRODUCT_FALLBACKS[pid] || { name: pid, category: 'Sản phẩm', image: '' };
+      const name = prod?.name || fb.name;
+      const imagePath = prod?.image || prod?.img || prod?.images?.[0] || fb.image;
+      const imgSrc = toAdminAsset(imagePath) || FALLBACK_IMG;
+      const imgTag = `<img src="${imgSrc}" alt="${name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.onerror=null;this.src='${FALLBACK_IMG}';">`;
+      const category = prod?.category || fb.category;
       const sold = productSales[pid];
       const rev = productRevenue[pid];
       const revStr = rev >= 1_000_000
@@ -111,5 +126,11 @@ document.addEventListener('DOMContentLoaded', () => {
     el.className = 'analytics-toast';
     document.body.appendChild(el);
     setTimeout(() => el.remove(), 2500);
+  }
+
+  function toAdminAsset(path) {
+    if (!path) return '';
+    if (/^https?:\/\//.test(path) || path.startsWith('../')) return path;
+    return path.startsWith('assets/') ? '../' + path : path;
   }
 });

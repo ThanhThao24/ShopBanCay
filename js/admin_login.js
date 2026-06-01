@@ -55,10 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
             clearErrors();
             passwordWrapper.style.backgroundColor = '';
             passwordWrapper.style.outline = '';
-    });
-
-    emailWrapper.addEventListener('click', () => emailInput.focus());
-    passwordWrapper.addEventListener('click', () => passwordInput.focus());
         }
     });
 

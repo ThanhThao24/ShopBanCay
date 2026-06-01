@@ -80,7 +80,7 @@
       description:
         "Thanh lọc không khí và cực kỳ bền bỉ. Hoàn hảo cho không gian thiếu sáng.",
       images: [
-        "assets/figma/18f92f04-c249-4b0b-a048-bbe229c443ce.png",
+        "assets/figma/0b792e64-6674-4316-9236-44d2610b4b45.jpg",
         "assets/figma/e2b7e060-89d0-4e77-8d46-758f09460557.png",
       ],
       tags: ["Ánh sáng yếu", "Thân thiện thú cưng"],
@@ -116,7 +116,7 @@
       active: true,
       description:
         "Lá xanh bóng, biểu tượng tài lộc và may mắn cho nhà ở hoặc văn phòng.",
-      images: ["assets/figma/402ccd75-5842-4a4d-a2ca-6784c0e5d07a.jpg"],
+      images: ["assets/figma/91a02e1e-fd77-4e16-bb9f-b2b696737138.jpg"],
       tags: ["Ánh sáng yếu", "May mắn tài lộc"],
       care: { light: "Ít ánh sáng", water: "Mỗi 2-3 tuần", temp: "18 - 30°C" },
     },
@@ -188,16 +188,17 @@
   ];
 
   const DEFAULT_CATEGORIES = [
-    { id: "cat-indoor", name: "Trong nhà", desc: "Cây lọc không khí, dễ đặt trong nhà.", qty: 32, active: true },
-    { id: "cat-outdoor", name: "Ngoài trời", desc: "Cây chịu sáng, phù hợp ban công và sân vườn.", qty: 18, active: true },
-    { id: "cat-fengshui", name: "Phong thủy", desc: "Các dòng cây biểu tượng tài lộc và may mắn.", qty: 12, active: true },
+    { id: "cat-tropical", name: "Nhiệt đới", desc: "Các loài cây nhiệt đới với tán lá rộng và xanh mướt.", qty: 45, active: true, img: "assets/figma/caeef0bf-fe55-4d83-8c2b-3b43ee06cfdc.jpg" },
+    { id: "cat-indoor",   name: "Trong nhà",  desc: "Cây lọc không khí, thích hợp trang trí không gian sống.", qty: 32, active: true, img: "assets/figma/7362ee9c-83cb-4db8-b1a7-3bef2b33f6cc.png" },
+    { id: "cat-succulent", name: "Sen đá & Xương rồng", desc: "Các loài mọng nước đa dạng, dễ chăm sóc.", qty: 18, active: false, img: "assets/figma/9697633d-bdd7-44be-8f07-987a08b66ae7.jpg" },
+    { id: "cat-rare",     name: "Giống cây quý hiếm", desc: "Bộ sưu tập những loài quý hiếm, đột biến gen đặc biệt.", qty: 12, active: true, img: "assets/figma/82118e07-e632-4236-851b-6d1e8510c991.jpg" },
   ];
 
   const DEFAULT_PROMOTIONS = [
-    { id: "promo-new15", code: "NEW15", name: "Ưu đãi khách hàng mới", type: "percent", value: 15, status: "running", usage: 0, usageMax: 500 },
-    { id: "promo-mam15", code: "MAM15", name: "Mầm Xanh 15%", type: "percent", value: 15, status: "running", usage: 0, usageMax: 500 },
-    { id: "promo-mx10", code: "MAMXANH10", name: "Mầm Xanh 10%", type: "percent", value: 10, status: "running", usage: 0, usageMax: 1000 },
-    { id: "promo-ship", code: "FREESHIP", name: "Miễn phí vận chuyển", type: "shipping", value: 0, status: "running", usage: 0, usageMax: 1000 },
+    { id: "promo-bloom24",  code: "BLOOM24",  name: "Spring Bloom",            desc: "Giảm giá đầu xuân 2024",      type: "amount",  value: 50000, status: "running",   usage: 250, usageMax: 500 },
+    { id: "promo-hello10",  code: "HELLO10",  name: "Welcome New User",        desc: "Ưu đãi khách hàng mới",       type: "percent", value: 15,    status: "running",   usage: 890, usageMax: 1000 },
+    { id: "promo-succu20",  code: "SUCCU20",  name: "Flash Sale Succulents",   desc: "Giảm giá sen đá cuối tuần",   type: "percent", value: 20,    status: "scheduled", usage: 0,   usageMax: 200 },
+    { id: "promo-winter23", code: "WINTER23", name: "Winter Sale 2023",        desc: "Xả kho mùa đông",             type: "percent", value: 30,    status: "expired",   usage: 500, usageMax: 500 },
   ];
 
   const DEFAULT_ORDERS = [
@@ -205,7 +206,7 @@
       id: "ORD-2849",
       date: "2026-04-20T09:30:00.000Z",
       customer: "Nguyễn Văn Hiếu",
-      items: [{ id: "bang-singapore", name: "Bàng Singapore", price: 600000, quantity: 1, image: "assets/figma/21f96f2e-2b44-4ed1-9dd4-b1661a96d720.png" }],
+      items: [{ id: "bang-singapore", name: "Bàng Singapore", price: 600000, quantity: 1, image: "assets/figma/7362ee9c-83cb-4db8-b1a7-3bef2b33f6cc.png" }],
       shipping: { fullname: "Nguyễn Văn Hiếu", phone: "0908 123 456", email: "hieu@example.com", address: "12 Nguyễn Huệ", district: "Quận 1", city: "TP. Hồ Chí Minh" },
       payment: "bank",
       subtotal: 600000,
@@ -224,6 +225,42 @@
       discount: 120000,
       total: 680000,
       status: "pending",
+    },
+    {
+      id: "ORD-2851",
+      date: "2026-04-21T15:40:00.000Z",
+      customer: "Lê Minh",
+      items: [{ id: "luoi-ho-laurenti", name: "Lưỡi hổ Laurenti", price: 600000, quantity: 8, image: "assets/figma/0b792e64-6674-4316-9236-44d2610b4b45.jpg" }],
+      shipping: { fullname: "Lê Minh", phone: "0911 234 567", email: "minh.le@example.com", address: "55 Nguyễn Trãi", district: "Quận 5", city: "TP. Hồ Chí Minh" },
+      payment: "card",
+      subtotal: 4800000,
+      discount: 0,
+      total: 4800000,
+      status: "processing",
+    },
+    {
+      id: "ORD-2852",
+      date: "2026-04-22T08:20:00.000Z",
+      customer: "Phạm Văn Quý",
+      items: [{ id: "sen-da", name: "Sen đá", price: 350000, quantity: 2, image: "assets/figma/9697633d-bdd7-44be-8f07-987a08b66ae7.jpg" }],
+      shipping: { fullname: "Phạm Văn Quý", phone: "0907 888 999", email: "quy.pham@example.com", address: "21 Pasteur", district: "Quận 1", city: "TP. Hồ Chí Minh" },
+      payment: "momo",
+      subtotal: 700000,
+      discount: 0,
+      total: 850000,
+      status: "cancelled",
+    },
+    {
+      id: "ORD-2853",
+      date: "2026-04-22T11:05:00.000Z",
+      customer: "Kiều Duy",
+      items: [{ id: "bang-singapore", name: "Bàng Singapore", price: 600000, quantity: 20, image: "assets/figma/7362ee9c-83cb-4db8-b1a7-3bef2b33f6cc.png" }],
+      shipping: { fullname: "Kiều Duy", phone: "0903 555 222", email: "duy.kieu@example.com", address: "100 Cách Mạng Tháng 8", district: "Quận 3", city: "TP. Hồ Chí Minh" },
+      payment: "bank",
+      subtotal: 12000000,
+      discount: 0,
+      total: 12000000,
+      status: "shipping",
     },
   ];
 
@@ -260,7 +297,12 @@
 
   function normalizeProduct(item, index = 0) {
     const id = item.id || item.sku || "product-" + (index + 1);
-    const image = item.image || item.img || item.images?.[0] || "";
+    let images = item.images?.length ? item.images : (item.image || item.img ? [item.image || item.img] : []);
+    if (!images.length) {
+      const def = DEFAULT_PRODUCTS.find((p) => p.id === id);
+      if (def?.images?.length) images = def.images.slice();
+    }
+    const image = images[0] || "";
     return {
       id,
       name: item.name || item.productName || "Sản phẩm",
@@ -273,7 +315,8 @@
       stockMax: Number(item.stockMax ?? 50),
       active: item.active !== false,
       description: item.description || item.desc || "Cây xanh được tuyển chọn bởi Mầm Xanh.",
-      images: item.images?.length ? item.images : image ? [image] : [],
+      image,
+      images,
       tags: item.tags?.length ? item.tags : ["Dễ chăm sóc"],
       care: item.care || { light: "Sáng gián tiếp", water: "Mỗi tuần", temp: "18 - 30°C" },
     };
@@ -281,13 +324,18 @@
 
   function normalizeCartItem(item, index = 0) {
     const id = item.id || item.productId || "cart-" + index;
+    let image = item.image || item.images?.[0] || "";
+    if (!image) {
+      const def = DEFAULT_PRODUCTS.find((p) => p.id === id);
+      image = def?.images?.[0] || "";
+    }
     return {
       id,
       name: item.name || item.productName || "Sản phẩm",
       productName: item.productName || item.name || "Sản phẩm",
       price: parsePrice(item.price),
       quantity: Number(item.quantity || item.qty || 1),
-      image: item.image || item.images?.[0] || "",
+      image,
     };
   }
 
@@ -469,14 +517,19 @@
   }
 
   function getCategories() {
-    return migrateArray(KEYS.categories, LEGACY_KEYS.categories, (cat, index) => ({
-      id: cat.id || "cat-" + index,
-      name: cat.name || "Danh mục",
-      desc: cat.desc || "",
-      img: cat.img || "",
-      qty: Number(cat.qty || 0),
-      active: cat.active !== false,
-    }), DEFAULT_CATEGORIES);
+    const defaultImgByName = Object.fromEntries(DEFAULT_CATEGORIES.map(c => [c.name, c.img || ""]));
+    return migrateArray(KEYS.categories, LEGACY_KEYS.categories, (cat, index) => {
+      const img = cat.img || cat.image || defaultImgByName[cat.name] || "";
+      return {
+        id: cat.id || "cat-" + index,
+        name: cat.name || "Danh mục",
+        desc: cat.desc || "",
+        img,
+        image: img,
+        qty: Number(cat.qty || 0),
+        active: cat.active !== false,
+      };
+    }, DEFAULT_CATEGORIES);
   }
 
   function saveCategories(categories) {

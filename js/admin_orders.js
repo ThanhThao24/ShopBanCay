@@ -48,12 +48,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return idx >= 0 ? idx : 0;
     }
 
+    const AVATAR_PALETTE = ['avatar-c0', 'avatar-c1', 'avatar-c2', 'avatar-c3', 'avatar-c4'];
+
+    function avatarClass(name) {
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) hash = (hash + name.charCodeAt(i)) % AVATAR_PALETTE.length;
+        return AVATAR_PALETTE[hash];
+    }
+
     function buildStatusBadge(indexOrStatus) {
         const index = typeof indexOrStatus === 'string'
             ? statusFlow.findIndex(s => s.id === indexOrStatus)
             : indexOrStatus;
-        const s = statusFlow[index] || statusFlow[0];
-        return `<span class="${s.className}" style="background-color: ${s.bg}; color: ${s.color}; padding: 4px 12px; border-radius: 9999px; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 10px;">${s.text}</span>`;
+        const s = statusFlow[index >= 0 ? index : 0] || statusFlow[0];
+        return `<span class="status-badge ${s.id}">${s.text}</span>`;
     }
 
     function buildOrderRow(order) {
@@ -63,23 +71,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const amount = order.amount || (window.MXStore ? window.MXStore.formatPrice(order.total) : order.total);
         const date = order.date && order.date.includes('T') ? new Date(order.date).toLocaleDateString('vi-VN') : order.date;
         const customer = order.customer || order.shipping?.fullname || 'Khách hàng';
-        const initials = order.initials || window.MXStore?.getInitials(customer) || 'KH';
+        const initials = order.initials || (customer.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()) || 'KH';
+        const avClass = order.avatarClass || avatarClass(customer);
         tr.innerHTML = `
-            <td style="padding: 32px;"><span class="order-id" style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #154212;">#${order.id}</span></td>
+            <td style="padding: 32px;"><span class="order-id">#${order.id}</span></td>
             <td style="padding: 0 32px;">
-                <div class="customer-info" style="display: flex; align-items: center; gap: 12px;">
-                    <div class="avatar" style="width: 32px; height: 32px; background-color: ${order.bgColor || '#bcf0ae'}; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 10px; color: #154212;">${initials}</div>
-                    <span class="customer-name" style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #1a1c19;">${customer}</span>
+                <div class="customer-info">
+                    <div class="avatar ${avClass}">${initials}</div>
+                    <span class="customer-name">${customer}</span>
                 </div>
             </td>
-            <td style="padding: 32px; font-family: 'Inter', sans-serif; font-size: 14px; color: #42493e;">${date}</td>
-            <td style="padding: 32px;"><span class="amount" style="font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #154212;">${amount}</span></td>
+            <td style="padding: 32px;">${date}</td>
+            <td style="padding: 32px;"><span class="amount">${amount}</span></td>
             <td style="padding: 32px;">${buildStatusBadge(statusIndexOf(order))}</td>
-            <td class="actions" style="padding: 32px; text-align: right;">
-                <div style="display: flex; justify-content: flex-end; gap: 16px;">
-                    <button class="action-btn" data-action="View" title="Xem" style="background: none; border: none; cursor: pointer;"><img src="../assets/figma/8e197189-e72a-4e24-9ce3-4ee64ed26168.svg" alt="View" style="width: 16px;"></button>
-                    <button class="action-btn" data-action="Edit" title="Sửa" style="background: none; border: none; cursor: pointer;"><img src="../assets/figma/041bb1be-597b-4c7b-af63-44260c9dd16e.svg" alt="Edit" style="width: 13px;"></button>
-                    <button class="action-btn" data-action="Print" title="In" style="background: none; border: none; cursor: pointer;"><img src="../assets/figma/1d12b54d-5daa-4497-b975-fa0cda5f6742.svg" alt="Print" style="width: 15px;"></button>
+            <td class="actions" style="padding: 32px;">
+                <div>
+                    <button class="action-btn" data-action="View" title="Xem"><img src="../assets/figma/8e197189-e72a-4e24-9ce3-4ee64ed26168.svg" alt="View"></button>
+                    <button class="action-btn" data-action="Edit" title="Sửa"><img src="../assets/figma/041bb1be-597b-4c7b-af63-44260c9dd16e.svg" alt="Edit"></button>
+                    <button class="action-btn" data-action="Print" title="In"><img src="../assets/figma/1d12b54d-5daa-4497-b975-fa0cda5f6742.svg" alt="Print"></button>
                 </div>
             </td>
         `;
@@ -145,10 +154,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 saveOrders(orders);
                 const badge = row.querySelector('.status-badge');
                 if (badge) {
-                    const s = statusFlow[nextIndex];
-                    badge.style.backgroundColor = s.bg;
-                    badge.style.color = s.color;
-                    badge.textContent = s.text;
+                    statusFlow.forEach(s => badge.classList.remove(s.id));
+                    badge.classList.add(statusFlow[nextIndex].id);
+                    badge.textContent = statusFlow[nextIndex].text;
                 }
                 showNotice(`Đã cập nhật trạng thái #${id}.`, 'success');
             } else if (action === 'Print') {
