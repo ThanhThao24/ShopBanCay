@@ -1,16 +1,75 @@
 /* ============================================================
    js/category.js — Category/Shop Page Logic
    ============================================================ */
+import { db, collection, getDocs } from "./firebase.js";
+async function loadProductsFromFirebase() {
+  const container = document.getElementById("product-grid");
 
-document.addEventListener("DOMContentLoaded", () => {
-  initNavbar();
-  initFilters();
+  const snapshot = await getDocs(collection(db, "products"));
+
+  let html = "";
+
+  snapshot.forEach((docSnap) => {
+    const p = docSnap.data();
+
+    const image = p.images?.[0] || p.image || "";
+
+    html += `
+      <div
+        class="shop-card"
+        data-id="${p.id}"
+        data-name="${p.name}"
+        data-price="${p.price}"
+        data-tags="${p.categorySlug || ""}"
+      >
+
+        <div class="shop-card-image">
+          <img src="${image}" alt="${p.name}" />
+
+          <button
+            class="shop-add-btn"
+            aria-label="Thêm vào giỏ hàng"
+          >
+            +
+          </button>
+        </div>
+
+        <div class="shop-card-content">
+          <div class="shop-card-title-row">
+            <h3 class="shop-card-name">
+              ${p.name}
+            </h3>
+
+            <span class="shop-card-price">
+              ${Number(p.price).toLocaleString("vi-VN")}đ
+            </span>
+          </div>
+
+          <p class="shop-card-desc">
+            ${p.description || ""}
+          </p>
+        </div>
+
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+
   initProductCards();
   initAddToCart();
   initPagination();
-  initPromoBanner();
-  window.MXCartBadge?.sync();
+
   applyFilters();
+}
+document.addEventListener("DOMContentLoaded", async () => {
+  initNavbar();
+  initFilters();
+  initPromoBanner();
+
+  await loadProductsFromFirebase();
+
+  window.MXCartBadge?.sync();
 });
 
 const filterState = {
