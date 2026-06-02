@@ -293,7 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         showToast("Đặt hàng thành công!", "success");
         setTimeout(() => {
-          const orderId = order?.id || orderData.id;
+          const orderId = orderData.id;
           window.location.href =
             "success.html?order=" + encodeURIComponent(orderId);
         }, 800);
