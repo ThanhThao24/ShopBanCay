@@ -96,7 +96,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-family: 'Manrope', sans-serif;
+                    font-family: &quot;Manrope&quot;, sans-serif;
                   "
                 >
                   1
@@ -124,7 +124,11 @@
                       class="input-wrapper"
                       style="background-color: #e8e8e3; border-radius: 16px"
                     >
-                      <input id="fullname" type="text" placeholder="Nguyễn Văn A" />
+                      <input
+                        id="fullname"
+                        type="text"
+                        placeholder="Nguyễn Văn A"
+                      />
                     </div>
                   </div>
                   <div class="form-group">
@@ -133,7 +137,11 @@
                       class="input-wrapper"
                       style="background-color: #e8e8e3; border-radius: 16px"
                     >
-                      <input id="phone" type="text" placeholder="090 123 4567" />
+                      <input
+                        id="phone"
+                        type="text"
+                        placeholder="090 123 4567"
+                      />
                     </div>
                   </div>
                 </div>
@@ -180,7 +188,11 @@
                       class="input-wrapper"
                       style="background-color: #e8e8e3; border-radius: 16px"
                     >
-                      <input id="note" type="text" placeholder="Chỉ dẫn giao hàng..." />
+                      <input
+                        id="note"
+                        type="text"
+                        placeholder="Chỉ dẫn giao hàng..."
+                      />
                     </div>
                   </div>
                 </div>
@@ -201,7 +213,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-family: 'Manrope', sans-serif;
+                    font-family: &quot;Manrope&quot;, sans-serif;
                   "
                 >
                   2
@@ -410,8 +422,11 @@
                   flex-direction: column;
                   gap: 24px;
                 "
+              >
+                <div
+                  id="sidebar-empty"
+                  style="display: none; color: #42493e; font-size: 14px"
                 >
-                <div id="sidebar-empty" style="display: none; color: #42493e; font-size: 14px">
                   Chưa có sản phẩm trong giỏ hàng.
                 </div>
                 <!-- Item 1 -->
@@ -536,7 +551,9 @@
                     style="font-size: 14px; color: #42493e"
                   >
                     <span>Tạm tính</span>
-                    <span id="summary-subtotal" style="font-weight: 600; color: #42493e"
+                    <span
+                      id="summary-subtotal"
+                      style="font-weight: 600; color: #42493e"
                       >1.400.000đ</span
                     >
                   </div>
@@ -545,13 +562,23 @@
                     style="font-size: 14px; color: #42493e"
                   >
                     <span>Phí vận chuyển</span>
-                    <span id="summary-shipping" style="font-weight: 600; color: #42493e"
+                    <span
+                      id="summary-shipping"
+                      style="font-weight: 600; color: #42493e"
                       >Miễn phí</span
                     >
                   </div>
-                  <div id="discount-row" class="flex justify-between hidden" style="font-size: 14px; color: #42493e">
+                  <div
+                    id="discount-row"
+                    class="flex justify-between hidden"
+                    style="font-size: 14px; color: #42493e"
+                  >
                     <span>Giảm giá</span>
-                    <span id="summary-discount" style="font-weight: 600; color: #154212">-0đ</span>
+                    <span
+                      id="summary-discount"
+                      style="font-weight: 600; color: #154212"
+                      >-0đ</span
+                    >
                   </div>
                 </div>
 
@@ -661,6 +688,6 @@
     <script src="js/store.js"></script>
 
     <script src="js/cart_badge.js"></script>
-    <script src="js/checkout.js"></script>
+    <script type="module" src="js/checkout.js"></script>
   </body>
 </html>
