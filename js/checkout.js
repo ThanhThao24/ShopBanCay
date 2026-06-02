@@ -246,6 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const orderData = {
         id: "MX-" + Date.now(),
         date: new Date().toISOString(),
+        customer: document.getElementById("fullname").value.trim(),
         items: cart.map((item) => ({
           id: item.id,
           name: item.name || item.productName,
